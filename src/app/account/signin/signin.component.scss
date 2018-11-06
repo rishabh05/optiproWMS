@@ -1,0 +1,18 @@
+@import 'src/assets/css/web/account_module/account';
+
+.opti_target-link{
+  position: relative;
+  top:12px;
+}
+
+.opti_display-inline-flex {
+  display: inline-flex !important;
+}
+
+.ng-untouched.ng-invalid{
+  border-color: $input-border-color;
+}
+
+.opti_signin-logo{
+  padding: 20px 20px 0 20px;
+}
