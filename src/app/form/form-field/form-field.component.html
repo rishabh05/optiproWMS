@@ -249,7 +249,95 @@
     </div>
 
     
-    
+    <!-- bootstrap form start -->
+    <div class="col-md-6 mt-5">
+      <div class="card">
+        <div class="card-body opti_bootstrap-form">
+          <!-- small form items -->
+          <fieldset>
+              <legend>Bootstrap Form</legend>
+
+              <div class="form-group row">
+                <label class="col-sm-4 col-form-label">First Name</label>
+                <div class="col-sm-8">
+                  <input class="k-textbox w-100" placeholder="Your Name" />
+                </div>
+              </div>
+
+              <div class="form-group row">
+                <label class="col-sm-4 col-form-label">Last Name</label>
+                <div class="col-sm-8">
+                  <input class="k-textbox w-100" placeholder="Your Last Name" />
+                </div>
+              </div>
+
+              <div class="form-group row">
+                <label class="col-sm-4 col-form-label">Numeric Box</label>
+                <div class="col-sm-8">
+                  <kendo-numerictextbox class="form-control" [value]="10" [min]="0" [max]="100"></kendo-numerictextbox>
+                </div>
+              </div>
+
+              <div class="form-group row">
+                <label class="col-sm-4 col-form-label">Drodown</label>
+                <div class="col-sm-8">
+                  <kendo-dropdownlist class="form-control" [data]="listItems" [value]="'Basketball'"></kendo-dropdownlist>
+                </div>
+              </div>
+
+              <div class="form-group row">
+                <label class="col-sm-4 col-form-label">Combo</label>
+                <div class="col-sm-8">
+                    <kendo-combobox class="form-control" [data]="listItems" [value]="'Basketball'"></kendo-combobox>
+                </div>
+              </div>
+
+              <div class="form-group row">
+                <label class="col-sm-4 col-form-label">MultiSelect</label>
+                <div class="col-sm-8">
+                    <kendo-multiselect class="form-control" [data]="listItems" [value]="value"></kendo-multiselect>
+                </div>
+              </div>
+
+              <div class="form-group row">
+                <label class="col-sm-4 col-form-label">Message</label>
+                <div class="col-sm-8">
+                    <textarea class="k-textarea">Lorem Ipsum is simply dummy text.</textarea>
+                </div>
+              </div>
+
+              <div class="form-group row">
+                <label class="col-sm-4 col-form-label">Radio</label>
+                <div class="col-sm-8">
+                    <input type="radio" name="group" id="radio10" class="k-radio" checked />
+                    <label class="k-radio-label" for="radio10">RadioButton 1</label>
+
+                    <input type="radio" name="group" id="radio11" class="k-radio" disabled />
+                    <label class="k-radio-label" for="radio11">RadioButton 2</label>
+
+                    <input type="radio" name="group" class="k-radio" id="radio12" />
+                    <label class="k-radio-label" for="radio12">RadioButton 3</label>
+                </div>
+              </div>
+
+              <div class="form-group row">
+                <label class="col-sm-4 col-form-label">Checkbox</label>
+                <div class="col-sm-8">
+                    <input type="checkbox" id="ch10" class="k-checkbox" checked />
+                    <label class="k-checkbox-label" for="ch10">Checkbox 1</label>
+
+                    <input type="checkbox" id="ch11" class="k-checkbox" checked disabled />
+                    <label class="k-checkbox-label" for="ch11">Checkbox 2</label>
+
+                    <input type="checkbox" id="ch12" class="k-checkbox">
+                    <label class="k-checkbox-label" for="ch12">Checkbox 3</label>
+                </div>
+              </div>
+          </fieldset>
+        </div>
+      </div>
+    </div>
+    <!-- bootstrap form end -->
     
 
   </div> 
