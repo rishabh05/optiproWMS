@@ -4,6 +4,7 @@ import { SalesOrderListComponent } from '../sales-order/sales-order-list/sales-o
 import { PortalHomeComponent } from './portal-home.component';
 import { DashboardComponent } from '../dashboard/dashboard.component';
 import { FormFieldComponent } from '../form/form-field/form-field.component';
+import { InboundComponent } from '../inbound/inbound.component';
 
 const routes: Routes = [
 
@@ -13,6 +14,7 @@ const routes: Routes = [
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
       { path:'dashboard', component:DashboardComponent },
       { path: 'salesorder', component:SalesOrderListComponent },
+      { path: 'inbound', component:InboundComponent },
       { path: 'form', component:FormFieldComponent },
     ]
     

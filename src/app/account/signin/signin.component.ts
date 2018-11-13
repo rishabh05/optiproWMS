@@ -144,6 +144,7 @@ export class SigninComponent implements OnInit {
           }
         },
         error => {
+          this.showLoader = false;
           alert("Login Failed");
         }
       );
@@ -151,15 +152,14 @@ export class SigninComponent implements OnInit {
       this.httpcallservice.getLicenseData().subscribe(
         data => {
           debugger
+          this.showLoader = false;
           this.licenseData = data;
-          localStorage.setItem("GUID", this.licenseData[1].GUID);
-          // this.router.navigate(['home']);
-          // setTimeout(() => {
-            this.showLoader = false;
-            this.router.navigateByUrl('home/dashboard');
+          localStorage.setItem("GUID", this.licenseData[0].GUID);
+          this.router.navigateByUrl('home/inbound');
           // }, 500);
         },
         error => {
+          this.showLoader = false;
           alert("license Failed");
         }
       );
@@ -202,7 +202,7 @@ export class SigninComponent implements OnInit {
   public OnOptionChange(value: WHS){
     debugger
     localStorage.setItem("WHS", value.OPTM_WHSE);
-    alert(value.OPTM_WHSE);
+    // alert(value.OPTM_WHSE);
   }
 
 

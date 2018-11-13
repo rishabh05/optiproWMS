@@ -7,6 +7,7 @@ import { PortalRightComponent } from './portal-right/portal-right.component';
 import { PortalTopComponent } from './portal-top/portal-top.component';
 import { PortalHomeComponent } from './portal-home.component';
 import { DashboardComponent } from '../dashboard/dashboard.component';
+import { InboundComponent } from '../inbound/inbound.component';
 import { ThemeManagerComponent } from '../common/theme-manager/theme-manager.component';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
@@ -43,7 +44,7 @@ import { FormModule } from '../form/form.module';
     
 
   ],
-  declarations: [PortalHomeComponent, PortalLeftComponent, PortalRightComponent, PortalTopComponent, DashboardComponent, ThemeManagerComponent],
+  declarations: [PortalHomeComponent, PortalLeftComponent, PortalRightComponent, PortalTopComponent, InboundComponent, DashboardComponent, ThemeManagerComponent],
   providers:[DashboardComponent]
 })
 export class PortalHomeModule { }
