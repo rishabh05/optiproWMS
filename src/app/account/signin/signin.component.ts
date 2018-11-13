@@ -155,7 +155,7 @@ export class SigninComponent implements OnInit {
           this.showLoader = false;
           this.licenseData = data;
           localStorage.setItem("GUID", this.licenseData[0].GUID);
-          this.router.navigateByUrl('home/inbound');
+          this.router.navigateByUrl('home/dashboard');
           // }, 500);
         },
         error => {
