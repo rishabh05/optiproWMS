@@ -7,7 +7,6 @@ import { PortalRightComponent } from './portal-right/portal-right.component';
 import { PortalTopComponent } from './portal-top/portal-top.component';
 import { PortalHomeComponent } from './portal-home.component';
 import { DashboardComponent } from '../dashboard/dashboard.component';
-import { InboundComponent } from '../inbound/inbound.component';
 import { ThemeManagerComponent } from '../common/theme-manager/theme-manager.component';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
@@ -20,7 +19,7 @@ import { ChartsModule } from '@progress/kendo-angular-charts';
 
 import { SalesOrderModule } from '../sales-order/sales-order.module';
 import { FormModule } from '../form/form.module';
-
+import { InboundModule } from '../inbound/inbound.module';
 
 
 @NgModule({
@@ -40,11 +39,13 @@ import { FormModule } from '../form/form.module';
     NgbModule,
     ChartsModule,
     SalesOrderModule,
+    InboundModule,
     FormModule
     
 
   ],
-  declarations: [PortalHomeComponent, PortalLeftComponent, PortalRightComponent, PortalTopComponent, InboundComponent, DashboardComponent, ThemeManagerComponent],
+  declarations: [PortalHomeComponent, PortalLeftComponent, PortalRightComponent, PortalTopComponent,
+     DashboardComponent, ThemeManagerComponent],
   providers:[DashboardComponent]
 })
 export class PortalHomeModule { }

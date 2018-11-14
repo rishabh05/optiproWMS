@@ -17,9 +17,9 @@
   <section class="opti_left-navigation opti_position-relative" [perfectScrollbar]="">
         <ul class="opti_left-nav-ul">   
             <li (click)="listClick($event, 'dashboard')" [ngClass]="{'active': selectedItem == 'dashboard'}"><a roterLink="dashboard" > <svg-icon src="assets/images/left-panel/dashboard.svg" [svgStyle]="{ 'width.px':20, 'height.px':20, 'fill':selectedThemeColor }"></svg-icon><span>Dashboard</span></a></li>
-            <li (click)="listClick($event, 'inbound')" [ngClass]="{'active': selectedItem == 'inbound'}"><a roterLink="salesorder"> <svg-icon src="assets/images/left-panel/Sales-Order.svg" [svgStyle]="{ 'width.px':20, 'height.px':20, 'fill':selectedThemeColor }"></svg-icon><span>Inbound</span></a></li>
+            <li (click)="listClick($event, 'venderselection')" [ngClass]="{'active': selectedItem == 'venderselection'}"><a roterLink="venderselection"> <svg-icon src="assets/images/left-panel/Sales-Order.svg" [svgStyle]="{ 'width.px':20, 'height.px':20, 'fill':selectedThemeColor }"></svg-icon><span>Inbound</span></a></li>
             <li (click)="listClick($event, 'form')" [ngClass]="{'active': selectedItem == 'form'}"><a roterLink="form"> <svg-icon src="assets/images/left-panel/Sales-Order.svg" [svgStyle]="{ 'width.px':20, 'height.px':20, 'fill':selectedThemeColor }"></svg-icon><span>Form Fields</span></a></li>
-            <!-- <li (click)="listClick($event, 'salesorder')" [ngClass]="{'active': selectedItem == 'salesorder'}"><a roterLink="salesorder"> <svg-icon src="assets/images/left-panel/Sales-Order.svg" [svgStyle]="{ 'width.px':20, 'height.px':20, 'fill':selectedThemeColor }"></svg-icon><span>Sales Order</span></a></li> -->
+            <li (click)="listClick($event, 'salesorder')" [ngClass]="{'active': selectedItem == 'salesorder'}"><a roterLink="salesorder"> <svg-icon src="assets/images/left-panel/Sales-Order.svg" [svgStyle]="{ 'width.px':20, 'height.px':20, 'fill':selectedThemeColor }"></svg-icon><span>Sales Order</span></a></li>
         </ul>
         
   </section>

@@ -7,6 +7,8 @@ import { LandingComponent } from './common/landing/landing.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 import { HttpClientModule } from '@angular/common/http';
+import { OutboundModule } from './outbound/outbound.module';
+
 
 
 @NgModule({
@@ -19,7 +21,8 @@ import { HttpClientModule } from '@angular/common/http';
     AppRoutingModule,
     BrowserAnimationsModule,
     PerfectScrollbarModule,
-    HttpClientModule
+    HttpClientModule,
+    OutboundModule
   ],
   providers: [],
   bootstrap: [AppComponent]

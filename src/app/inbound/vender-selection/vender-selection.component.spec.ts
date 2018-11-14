@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { InboundComponent } from './inbound.component';
+import { VenderSelectionComponent } from './vender-selection.component';
 
-describe('InboundComponent', () => {
-  let component: InboundComponent;
-  let fixture: ComponentFixture<InboundComponent>;
+describe('VenderSelectionComponent', () => {
+  let component: VenderSelectionComponent;
+  let fixture: ComponentFixture<VenderSelectionComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ InboundComponent ]
+      declarations: [ VenderSelectionComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(InboundComponent);
+    fixture = TestBed.createComponent(VenderSelectionComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

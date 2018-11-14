@@ -48,8 +48,9 @@ export class PortalTopComponent implements OnInit {
   }
 
   signOut() {
-
+    this.router.navigateByUrl('account');
   }
+  
 
   openVerticallyCentered(content) {
     this.modalService.open(content, { centered: true });
