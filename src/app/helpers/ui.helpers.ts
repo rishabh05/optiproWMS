@@ -131,7 +131,7 @@ export  class UIHelper{
     }
 
     // our custom tab section
-    public static customOpenTab(evt, tabName, type) {
+    public static customOpenTab(evt,  type) {
         if(type == 'horizontal'){
             var i, tabcontent, tablinks;
             // tabcontent = document.getElementsByClassName("opti_tabcontent");

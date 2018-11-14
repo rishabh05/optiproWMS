@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, HostListener } from '@angular/core';
 import { CurrentSidebarInfo } from '../../models/sidebar/current-sidebar-info';
 import { UIHelper } from '../../helpers/ui.helpers';
+import { Configuration } from '../../../assets/configuration';
 
 @Component({
   selector: 'app-sales-order-detail',
@@ -9,16 +10,25 @@ import { UIHelper } from '../../helpers/ui.helpers';
 })
 export class SalesOrderDetailComponent implements OnInit {
 
+  
   @Input() currentSidebarInfo:CurrentSidebarInfo;
 
   constructor() { }
 
   tabName: string = 'home';
+  vTabName: string = 'vhome';
+  imgPath = Configuration.imagePath;
 
   // tab function
-  openTab(evt, tabName) {
-    this.tabName = tabName;
-    UIHelper.customOpenTab(evt, tabName, 'horizontal');
+  openTab(evt, tabName, tabType) {
+    if(tabType=='vertical'){
+      this.vTabName = tabName;
+      UIHelper.customOpenTab(evt, 'vertical');
+    }else{
+      this.vTabName = 'vhome';
+      this.tabName = tabName;
+      UIHelper.customOpenTab(evt, 'horizontal');
+    }
   }
 
   @HostListener('window:resize', ['$event'])
