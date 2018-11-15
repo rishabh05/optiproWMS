@@ -63,10 +63,11 @@ export class HttpCallServiceService {
       this.httpOptions);
   }
 
-  getLicenseData(): Observable<any> {
+  getLicenseData(compId: string): Observable<any> {
+    debugger
     let jObject = {
       LoginId: localStorage.getItem("UserId"),
-      CompanyId: localStorage.getItem("CompID")
+      CompanyId: compId
     };
     return this.http.post(this.baseUrl + this.licenseDataUrl, jObject, this.httpOptions);
   }

@@ -55,7 +55,7 @@
                             <kendo-dropdownlist class="form-control form-control-sm"
                             
                              [data]="companyName" name="selectedItem"
-                             [defaultItem]="selectedItem"
+                             [(ngModel)]="selectedItem"
                              id="compId"
                              ></kendo-dropdownlist>
                         </label>
@@ -67,7 +67,8 @@
                              textField="OPTM_WHSE"
                              valueField="BPLid"
                              id="whseId"
-                             [defaultItem]="defaultWHS"
+                             name = "defaultWHS"
+                             [(ngModel)]="defaultWHS"
                              (selectionChange)="OnOptionChange($event)"
                             ></kendo-dropdownlist>
                         </label>

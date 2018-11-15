@@ -34,7 +34,7 @@ export class SigninComponent implements OnInit {
   userDetails: ValidateUser[];
   licenseData: LicenseData[];
   selectedItem: string = "Select Company";
-  selectedWhse: string ="";
+  selectedWhse: string = "";
   whsList: WHS[] = [];
   defaultWHS = { OPTM_WHSE: "Select Warehouse", BPLid: 0 };
   public companyName: Array<string> = [];
@@ -74,14 +74,21 @@ export class SigninComponent implements OnInit {
   }
 
   public setWarehouseList() {
-    if (document.getElementById("compId").innerText.trim() == 'Select Company') {
-      alert("Please Select Company!");
-      return;
+    debugger
+    if (document.getElementById("compId") != null) {
+      this.selectedItem = document.getElementById("compId").innerText.trim();
     }
-    this.httpcallservice.getWHS(document.getElementById("compId").innerText.trim()).subscribe(
+
+    this.httpcallservice.getWHS(this.selectedItem).subscribe(
       data => {
         debugger
         this.whsList = data.Table;
+
+        for (var i = 0; i < this.whsList.length; i++) {
+          if (this.getCookie('whseId') == this.whsList[i].OPTM_WHSE) {
+            this.defaultWHS = this.whsList[i];
+          }
+        }
       },
       error => {
         alert("get setWarehouseList Failed");
@@ -128,8 +135,9 @@ export class SigninComponent implements OnInit {
   public async login() {
     if (this.userName == "" || this.password == "") {
       alert("username or password cannot be blank");
-      return;
+      return true;
     }
+
     this.showLoader = true;
     if (!this.isCompleteLoginVisible) {
       this.httpcallservice.ValidateUserLogin(this.userName, this.password).subscribe(
@@ -143,18 +151,12 @@ export class SigninComponent implements OnInit {
         }
       );
     } else {
-      debugger
-      if (document.getElementById("compId").innerText.trim() == 'Select Company') {
+      this.selectedItem = document.getElementById("compId").innerText.trim();
+      if (this.validateFields()) {
         this.showLoader = false;
-        alert("Please Select Company!");
         return;
       }
-      if (document.getElementById("whseId").innerText.trim() == 'Select Warehouse') {
-        this.showLoader = false;
-        alert("Please Select Warehouse!");
-        return;
-      }
-      this.httpcallservice.getLicenseData().subscribe(
+      this.httpcallservice.getLicenseData(this.selectedItem).subscribe(
         data => {
           this.licenseData = data;
           this.handleLicenseDataSuccessResponse();
@@ -172,33 +174,32 @@ export class SigninComponent implements OnInit {
     this.showLoader = false;
     if (this.userDetails == null || this.userDetails.length < 1) {
       alert("Invalid username");
-      return;
+      return true;
     }
     if (this.userDetails[0].OPTM_ACTIVE == 0) {
       alert("User not active");
-      return;
+      return true;
     }
-    
+
     localStorage.setItem("UserId", this.userName);
     document.getElementById("connectbtn").innerText = "Login";
-    
+
     this.isCompleteLoginVisible = true;
     this.readonlyFlag = true;
+    // this.companyName.push("Select Company");
     this.userDetails.forEach(element => {
       this.companyName.push(element.OPTM_COMPID);
     });
 
-    for(var i=0; i<this.companyName.length; i++){
-      if(this.getCookie('CompID') == this.companyName[i]){
+    debugger
+    for (var i = 0; i < this.companyName.length; i++) {
+      if (this.getCookie('CompID') == this.companyName[i]) {
         this.selectedItem = this.companyName[i];
+        this.setWarehouseList();
       }
     }
 
-    for(var i=0; i<this.whsList.length; i++){
-      if(this.getCookie('whseId') == this.whsList[i].OPTM_WHSE){
-        this.defaultWHS = this.whsList[i];
-      }
-    }
+
   }
 
   private handleLicenseDataSuccessResponse() {
@@ -235,4 +236,25 @@ export class SigninComponent implements OnInit {
       alert(this.licenseData[0].ErrMessage);
     }
   }
+
+
+  private validateFields(): boolean {
+
+    debugger
+
+
+    if (this.selectedItem == 'Select Company' || this.selectedItem == '') {
+      this.showLoader = false;
+      alert("Please Select Company!");
+      return true;
+    }
+    if (document.getElementById("whseId").innerText.trim() == 'Select Warehouse' ||
+      document.getElementById("whseId").innerText.trim() == "") {
+      this.showLoader = false;
+      alert("Please Select Warehouse!");
+      return true;
+    }
+    return false;
+  }
+
 }
