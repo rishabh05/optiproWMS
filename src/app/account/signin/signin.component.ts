@@ -33,11 +33,12 @@ export class SigninComponent implements OnInit {
   isCompleteLoginVisible: boolean = false;
   userDetails: ValidateUser[];
   licenseData: LicenseData[];
-  selectedItem: string = "hello";
-  whsList: WHS[];
+  selectedItem: string = "Select Company";
+  selectedWhse: string ="";
+  whsList: WHS[] = [];
   defaultWHS = { OPTM_WHSE: "Select Warehouse", BPLid: 0 };
-  public companyName: Array<string>;
-  // public selectedWHS: WHS = { OPTM_WHSE: "Select Warehouse", BPLid: 0 };
+  public companyName: Array<string> = [];
+  readonlyFlag: boolean = false;
 
   constructor(private router: Router, private httpcallservice: HttpCallServiceService) { }
 
@@ -69,14 +70,17 @@ export class SigninComponent implements OnInit {
         alert("get PSURL Failed");
       }
     );
-    localStorage.setItem("WHS", "Select Warehouse");
+    localStorage.setItem("whseId", "Select Warehouse");
   }
 
   public setWarehouseList() {
-    
-    // debugger
-    this.httpcallservice.getWHS().subscribe(
+    if (document.getElementById("compId").innerText.trim() == 'Select Company') {
+      alert("Please Select Company!");
+      return;
+    }
+    this.httpcallservice.getWHS(document.getElementById("compId").innerText.trim()).subscribe(
       data => {
+        debugger
         this.whsList = data.Table;
       },
       error => {
@@ -122,7 +126,7 @@ export class SigninComponent implements OnInit {
    * Function for login
    */
   public async login() {
-    if(this.userName == "" || this.password == ""){
+    if (this.userName == "" || this.password == "") {
       alert("username or password cannot be blank");
       return;
     }
@@ -131,7 +135,6 @@ export class SigninComponent implements OnInit {
       this.httpcallservice.ValidateUserLogin(this.userName, this.password).subscribe(
         data => {
           this.userDetails = data.Table;
-          localStorage.setItem("UserId", this.userName);
           this.handleValidationUserSuccessResponse();
         },
         error => {
@@ -141,7 +144,12 @@ export class SigninComponent implements OnInit {
       );
     } else {
       debugger
-      if (localStorage.getItem("WHS") == 'Select Warehouse') {
+      if (document.getElementById("compId").innerText.trim() == 'Select Company') {
+        this.showLoader = false;
+        alert("Please Select Company!");
+        return;
+      }
+      if (document.getElementById("whseId").innerText.trim() == 'Select Warehouse') {
         this.showLoader = false;
         alert("Please Select Warehouse!");
         return;
@@ -162,36 +170,59 @@ export class SigninComponent implements OnInit {
 
   private handleValidationUserSuccessResponse() {
     this.showLoader = false;
-    if (this.userDetails[0].OPTM_ACTIVE == 0) {
-      // show msg
+    if (this.userDetails == null || this.userDetails.length < 1) {
+      alert("Invalid username");
       return;
     }
+    if (this.userDetails[0].OPTM_ACTIVE == 0) {
+      alert("User not active");
+      return;
+    }
+    
+    localStorage.setItem("UserId", this.userName);
     document.getElementById("connectbtn").innerText = "Login";
+    
     this.isCompleteLoginVisible = true;
-    if (this.userDetails.length > 1) {
+    this.readonlyFlag = true;
+    this.userDetails.forEach(element => {
+      this.companyName.push(element.OPTM_COMPID);
+    });
 
-    } else {
-      localStorage.setItem("CompID", this.userDetails[0].OPTM_COMPID);
-      this.companyName = [this.userDetails[0].OPTM_COMPID];
-      this.selectedItem = this.companyName[0];
+    for(var i=0; i<this.companyName.length; i++){
+      if(this.getCookie('CompID') == this.companyName[i]){
+        this.selectedItem = this.companyName[i];
+      }
+    }
+
+    for(var i=0; i<this.whsList.length; i++){
+      if(this.getCookie('whseId') == this.whsList[i].OPTM_WHSE){
+        this.defaultWHS = this.whsList[i];
+      }
     }
   }
 
   private handleLicenseDataSuccessResponse() {
     debugger
+    this.selectedWhse = document.getElementById("whseId").innerText.trim();
     this.showLoader = false;
     if (this.licenseData.length > 1) {
       if (this.licenseData[1].ErrMessage == "" || this.licenseData[1].ErrMessage == null) {
         if (this.licenseData[0].Message == "True") {
+          this.selectedItem = document.getElementById("compId").innerText.trim();
           localStorage.setItem("GUID", this.licenseData[1].GUID);
-          localStorage.setItem("CompID", this.userDetails[0].OPTM_COMPID);
+          localStorage.setItem("CompID", this.selectedItem);
+          localStorage.setItem("whseId", this.selectedWhse);
           // code for remember me
           if (this.isRemember == true) {
             this.setCookie('cookieEmail', this.userName, 365);
             this.setCookie('cookiePassword', this.password, 365);
+            this.setCookie('CompID', this.selectedItem, 365);
+            this.setCookie('whseId', this.selectedWhse, 365);
           } else {
             this.setCookie('cookieEmail', "", 365);
             this.setCookie('cookiePassword', "", 365);
+            this.setCookie('CompID', "", 365);
+            this.setCookie('whseId', "", 365);
           }
           this.router.navigateByUrl('home/dashboard');
         } else {
@@ -203,13 +234,5 @@ export class SigninComponent implements OnInit {
     } else {
       alert(this.licenseData[0].ErrMessage);
     }
-  }
-
-  public OnOptionChange(value: WHS) {
-    localStorage.setItem("WHS", value.OPTM_WHSE);
-  }
-
-  public OnCompanySelectionChange(value: string) {
-    localStorage.setItem("CompID", value);
   }
 }

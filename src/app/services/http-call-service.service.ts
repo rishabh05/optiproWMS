@@ -30,8 +30,8 @@ export class HttpCallServiceService {
     let jObject = {
       GoodsReceiptToken: JSON.stringify([{
         UserId: '',
-        CompanyDBId: 'QAHS1127IR7GAR', WhseCode: '01',
-        FuturePO: false, PO: "", GUID: localStorage.getItem("GUID"), //'8d2b2cd2-a599-4f78-89fc-54a07b72fbc6',
+        CompanyDBId: localStorage.getItem("CompID"), WhseCode: localStorage.getItem("whseId"),
+        FuturePO: false, PO: "", GUID: localStorage.getItem("GUID"),
         UsernameForLic: 'vishal'
       }])
     };
@@ -47,7 +47,8 @@ export class HttpCallServiceService {
         Password: pwd, IsAdmin: "true"
       }])
     };
-    return this.http.post(localStorage.getItem("PSURLFORADMIN") + this.validateUser, jObject, this.httpOptions);
+    return this.http.post(localStorage.getItem("PSURLFORADMIN") + this.validateUser, jObject,
+      this.httpOptions);
   }
 
   getWarehouseList(uname: String, compId: String): Observable<any> {
@@ -58,11 +59,15 @@ export class HttpCallServiceService {
         CompanyDBId: compId
       }])
     };
-    return this.http.post(localStorage.getItem("PSURLFORADMIN") + this.validateUser, jObject, this.httpOptions);
+    return this.http.post(localStorage.getItem("PSURLFORADMIN") + this.validateUser, jObject,
+      this.httpOptions);
   }
 
   getLicenseData(): Observable<any> {
-    let jObject = { LoginId: localStorage.getItem("UserId"), CompanyId: localStorage.getItem("CompID") };
+    let jObject = {
+      LoginId: localStorage.getItem("UserId"),
+      CompanyId: localStorage.getItem("CompID")
+    };
     return this.http.post(this.baseUrl + this.licenseDataUrl, jObject, this.httpOptions);
   }
 
@@ -71,7 +76,7 @@ export class HttpCallServiceService {
     let jObject = {
       GoodsReceiptToken: JSON.stringify([{
         UserId: '',
-        CompanyDBId: localStorage.getItem("CompID"), WhseCode: '01',
+        CompanyDBId: localStorage.getItem("CompID"), WhseCode: localStorage.getItem("whseId"),
         ItemCode: '', VendorCode: "RJ-V",
         FuturePO: false, IsCustom: false, GUID: localStorage.getItem("GUID"),
         UsernameForLic: localStorage.getItem("UserId")
@@ -87,11 +92,14 @@ export class HttpCallServiceService {
     return this.http.post(this.baseUrl + this.PSUrl, jObject, this.httpOptions);
   }
 
-  getWHS(): Observable<any> {
+  getWHS(compId: string): Observable<any> {
     let jObject = {
-      CompanyName: JSON.stringify([{ Username: localStorage.getItem("UserId"), 
-      CompanyDBId: localStorage.getItem("CompID") }])
+      CompanyName: JSON.stringify([{
+        Username: localStorage.getItem("UserId"),
+        CompanyDBId: compId
+      }])
     };
-    return this.http.post(localStorage.getItem("PSURLFORADMIN") + this.WHS, jObject, this.httpOptions);
+    return this.http.post(localStorage.getItem("PSURLFORADMIN") + this.WHS, jObject,
+      this.httpOptions);
   }
 }

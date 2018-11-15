@@ -31,7 +31,10 @@
                          !emailId.errors?.valid " class="float-right opti_error-msg">
                          User does not exists.</span> -->
                         </span> 
-                        <input type="text"  name = "email" required [(ngModel)]="userName"  #emailId = ngModel class="k-textbox" value="" placeholder="Enter Username" />
+                        <input type="text"  name = "email" required [(ngModel)]="userName"
+                          #emailId = ngModel class="k-textbox" value="" placeholder="Enter Username"
+                          [readonly]=readonlyFlag
+                          />
                     </label>
                     
                     <label class="k-form-field">
@@ -40,7 +43,9 @@
                             <span  *ngIf="this.isError==true &&  (pwd.dirty || pwd.touched) && (emailId.dirty || emailId.touched) && !pwd.errors?.required" class="float-right opti_error-msg">Invalid credentials.</span>
                             
                         </span>
-                        <input name = "password" required [(ngModel)]="password" #pwd = ngModel type="password" class="k-textbox" value="" placeholder="Your password" />
+                        <input name = "password" required [(ngModel)]="password" 
+                        #pwd = ngModel type="password" class="k-textbox" value="" 
+                        placeholder="Your password" [readonly] = readonlyFlag/>
                     </label>
 
                     <!-- start if condition -->
@@ -48,8 +53,11 @@
                         <label class="k-form-field">
                             <span class="opti_form-label">Company </span>
                             <kendo-dropdownlist class="form-control form-control-sm"
-                            (selectionChange)="OnCompanySelectionChange($event)"
-                             [data]="companyName" name="selectedItem" [(ngModel)]="selectedItem"></kendo-dropdownlist>
+                            
+                             [data]="companyName" name="selectedItem"
+                             [defaultItem]="selectedItem"
+                             id="compId"
+                             ></kendo-dropdownlist>
                         </label>
 
                         <label class="k-form-field">
@@ -58,6 +66,7 @@
                              [data]="whsList" (click)="setWarehouseList()" 
                              textField="OPTM_WHSE"
                              valueField="BPLid"
+                             id="whseId"
                              [defaultItem]="defaultWHS"
                              (selectionChange)="OnOptionChange($event)"
                             ></kendo-dropdownlist>
