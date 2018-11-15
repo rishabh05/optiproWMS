@@ -2,6 +2,7 @@ import { Component, OnInit, HostListener } from '@angular/core';
 import { UIHelper } from '../../helpers/ui.helpers';
 import { GridComponent } from '@progress/kendo-angular-grid';
 import { salesOrderContent } from '../../DemoData/sales-order';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-sales-order-detail-content',
@@ -9,7 +10,7 @@ import { salesOrderContent } from '../../DemoData/sales-order';
   styleUrls: ['./sales-order-detail-content.component.scss']
 })
 export class SalesOrderDetailContentComponent implements OnInit {
-
+  imgPath = environment.imagePath;
   public gridData: any[];
   isMobile: boolean;
   isColumnFilter: boolean = false;

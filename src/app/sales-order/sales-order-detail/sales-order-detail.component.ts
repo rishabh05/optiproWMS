@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, HostListener } from '@angular/core';
 import { CurrentSidebarInfo } from '../../models/sidebar/current-sidebar-info';
 import { UIHelper } from '../../helpers/ui.helpers';
-import { Configuration } from '../../../assets/configuration';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-sales-order-detail',
@@ -17,7 +17,7 @@ export class SalesOrderDetailComponent implements OnInit {
 
   tabName: string = 'home';
   vTabName: string = 'vhome';
-  imgPath = Configuration.imagePath;
+  imgPath = environment.imagePath;
 
   // tab function
   openTab(evt, tabName, tabType) {

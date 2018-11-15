@@ -1,8 +1,8 @@
 import { Component, OnInit, HostListener } from '@angular/core';
-import { Configuration } from '../../../assets/configuration';
 import { UIHelper } from '../../helpers/ui.helpers';
 import { SalesNoteModel } from '../../tempmodels/SalesNoteModel';
 import { salesOrderNotes } from '../../DemoData/sales-order';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-sales-order-detail-notes',
@@ -16,7 +16,7 @@ export class SalesOrderDetailNotesComponent implements OnInit {
   /**
   * global variable
  */
-  imgPath = Configuration.imagePath;
+  imgPath = environment.imagePath;
   isMobile: boolean;
   gridHeight: number;
 

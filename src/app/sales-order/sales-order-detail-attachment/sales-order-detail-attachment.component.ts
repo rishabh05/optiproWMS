@@ -3,7 +3,8 @@ import { UIHelper } from '../../helpers/ui.helpers';
 import { salesOrderAttachment } from '../../DemoData/sales-order';
 import { GridComponent } from '@progress/kendo-angular-grid';
 import { UploadEvent, UploadFile, FileSystemFileEntry, FileSystemDirectoryEntry } from 'ngx-file-drop';
-import { Configuration } from '../../../assets/configuration';
+
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-sales-order-detail-attachment',
@@ -14,7 +15,7 @@ export class SalesOrderDetailAttachmentComponent implements OnInit {
 
   showGrid:boolean=true;
 
-  imgPath = Configuration.imagePath;
+  imgPath = environment.imagePath;
   pageLimit;
   pagination:boolean;
 

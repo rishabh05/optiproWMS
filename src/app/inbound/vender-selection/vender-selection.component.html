@@ -57,9 +57,9 @@
                     </form>
 
                     <!-- export -->
-                    <button type="button" kendoGridExcelCommand icon="file-excel" class="float-left opti_grid-toolbar-excelbutton">
+                    <!-- <button type="button" kendoGridExcelCommand icon="file-excel" class="float-left opti_grid-toolbar-excelbutton">
                         <svg-icon src="assets/images/common/download.svg" [svgStyle]="{ 'width.px':16, 'height.px':16}"></svg-icon>
-                    </button>
+                    </button> -->
 
 
                     <!-- <div class="float-right opti_right-top-sec-grid-purchase opti_right-top-sec-grid">
@@ -73,11 +73,16 @@
 
                 </ng-template>
 
-                <kendo-grid-column field="Total" title="Purchase Order Number" [width]="160"></kendo-grid-column>
-                <kendo-grid-column field="Total" title="Delete" [width]="160"></kendo-grid-column>
+                <kendo-grid-column field="orderNumber" title="Purchase Order Number" ></kendo-grid-column>
+                <kendo-grid-column field="orderId" title="Delete">
+                    <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex"> 
+                        <svg-icon  src="{{imgPath}}/common/download.svg" [svgStyle]="{ 'width.px':16, 'height.px':16}"></svg-icon>
+                        {{dataItem.orderId}}
+                    </ng-template>
+                </kendo-grid-column>
                 
                 <!-- xlsx template start -->
-                <kendo-grid-excel fileName="Sales-order.xlsx"></kendo-grid-excel>
+                <!-- <kendo-grid-excel fileName="Sales-order.xlsx"></kendo-grid-excel> -->
                 <!-- xlsx template end -->
             </kendo-grid>
         </div>    
