@@ -48,3 +48,26 @@ export const purchaseOrderNumberVendor = [
         'orderId':13
     }
 ]
+
+export const vendorCodeName = [
+    {
+        'code':'v100',
+        'name':'sea corp'
+    },
+    {
+        'code':'v1001',
+        'name':'sea corp'
+    },
+    {
+        'code':'v1002',
+        'name':'sea corp'
+    },
+    {
+        'code':'v1003',
+        'name':'sea corp'
+    },
+    {
+        'code':'v1004',
+        'name':'sea corp'
+    }
+]

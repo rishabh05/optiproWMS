@@ -51,11 +51,27 @@ app-sales-order-detail-attachment{
   }
 }
 
+// Right Content section
 .opti_content-section {
   padding-top: 15px;
   height: calc(100% - 48px) !important;
   padding-bottom: 15px;
   overflow-y: auto;
+}
+
+// For Lookup
+.opti_field-lookup{
+  input{
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+  button{
+    margin-left: 0 !important;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    padding: 6px;
+    padding-bottom: 8px;
+  }
 }
 
 /////////////////////////////////////////////////////////////////////
