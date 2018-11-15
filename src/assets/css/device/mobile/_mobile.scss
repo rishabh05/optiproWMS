@@ -4,7 +4,9 @@
 @import 'sales-order_module/_mobile_sales_order_common';
 
 
-
+.opti_mainContent-inner{
+    height: calc(100vh - 65px) !important;
+}
 
 
 /////////////////////////////////////////
