@@ -32,7 +32,7 @@ export class HttpCallServiceService {
         UserId: '',
         CompanyDBId: localStorage.getItem("CompID"), WhseCode: localStorage.getItem("whseId"),
         FuturePO: false, PO: "", GUID: localStorage.getItem("GUID"),
-        UsernameForLic: 'vishal'
+        UsernameForLic: localStorage.getItem("UserId")
       }])
     };
     return this.http.post(this.baseUrl + this.venderListUrl, jObject, this.httpOptions);

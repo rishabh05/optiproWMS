@@ -4,6 +4,8 @@ import { UIHelper } from '../../helpers/ui.helpers';
 import { GridComponent } from '@progress/kendo-angular-grid';
 import { environment } from '../../../environments/environment';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { HttpCallServiceService } from '../../services/http-call-service.service';
+import { Vender } from '../../models/Vender';
 
 @Component({
   selector: 'app-vender-selection',
@@ -12,7 +14,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 })
 export class VenderSelectionComponent implements OnInit {
 
-  constructor(private modalService: NgbModal) { }
+  constructor(private modalService: NgbModal, private httpCallServiceService: HttpCallServiceService) { }
 
   imgPath = environment.imagePath;
   isMobile: boolean;
@@ -23,7 +25,12 @@ export class VenderSelectionComponent implements OnInit {
 
   public gridData: any[];
   public gridData2: any[];
-  
+
+  venders: Vender[];
+  venderCode: String = "";
+  venderName: String = "";
+
+
   // UI Section
   @HostListener('window:resize', ['$event'])
   onResize(event) {
@@ -31,7 +38,7 @@ export class VenderSelectionComponent implements OnInit {
   }
   // End UI Section
 
-  
+
 
   ngOnInit() {
     // Apply class on body start
@@ -44,10 +51,9 @@ export class VenderSelectionComponent implements OnInit {
     this.isMobile = UIHelper.isMobile();
 
     this.getPurchaseOrderList();
-    this.getVendorCodeAndName();
+    // this.getVendorCodeAndName();
 
   }
-
 
   /**
    * Method to get list of inquries from server.
@@ -55,7 +61,7 @@ export class VenderSelectionComponent implements OnInit {
   public getPurchaseOrderList() {
     this.showLoader = true;
     this.gridData = purchaseOrderNumberVendor;
-    setTimeout(()=>{    
+    setTimeout(() => {
       this.showLoader = false;
     }, 1000);
   }
@@ -63,33 +69,48 @@ export class VenderSelectionComponent implements OnInit {
   /**
    * 
   */
-  getVendorCodeAndName(){
-    this.showLoader = true;
-    this.gridData2 = vendorCodeName;
-    setTimeout(()=>{    
-      this.showLoader = false;
-    }, 1000);
+  getVendorCodeAndName() {
+    // this.showLoader = true;
+    this.gridData2 = this.venders;
+    // setTimeout(() => {
+    //   this.showLoader = false;
+    // }, 1000);
   }
 
 
 
-  onFilterChange(checkBox:any,grid:GridComponent)
-  {
-    if(checkBox.checked==false){
+  onFilterChange(checkBox: any, grid: GridComponent) {
+    if (checkBox.checked == false) {
       this.clearFilter(grid);
     }
   }
 
-  clearFilter(grid:GridComponent){      
+  clearFilter(grid: GridComponent) {
     //grid.filter.filters=[];
   }
 
   openVerticallyCentered(content) {
-    this.modalService.open(content, { centered: true });
-  }  
+    this.httpCallServiceService.getVenderList().subscribe(
+      (data: any) => {
+        console.log(data);
+        debugger
+        this.venders = data.Table;
+        this.getVendorCodeAndName();
+        this.modalService.open(content, { centered: true });
+      },
+      error => {
+        console.log("Error: ", error);
+        alert("fail");
+      }
+    );
+  }
 
-  selectVendorCode(e){
-    
+  selectVendorCode(selection) {
+    debugger
+    const vender = selection.selectedRows[0].dataItem;
+    this.venderCode = vender.CARDCODE;
+    this.venderName = vender.CARDNAME;
+    // this.modalService.dismissAll;
   }
 
 }

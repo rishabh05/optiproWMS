@@ -13,7 +13,7 @@
               <div class="form-group row">
                 <label class="col-sm-4 col-form-label">Vendor</label>
                 <div class="col-sm-8 opti_field-lookup">
-                  <input class="k-textbox" />
+                  <input class="k-textbox" id="vender" name="vender" [(ngModel)]=venderCode placeholder="Please select vender"/>
                   <button (click)="openVerticallyCentered(vendorCodeName)"><svg-icon src="{{imgPath}}/common/download.svg" [svgStyle]="{ 'width.px':16, 'height.px':16, 'fill':'#fff'}"></svg-icon></button>
                 </div>
               </div>
@@ -21,7 +21,7 @@
               <div class="form-group row">
                 <label class="col-sm-4 col-form-label">Name</label>
                 <div class="col-sm-8">
-                    <label class="col-form-label">Prashant</label>
+                    <label class="col-form-label" >{{venderName}}</label>
                 </div>
               </div>
           </div>
@@ -174,8 +174,8 @@
 
             </ng-template>
 
-            <kendo-grid-column field="code" title="Vendor Code"  ></kendo-grid-column>
-            <kendo-grid-column field="name" title="Vendor Name"></kendo-grid-column>
+            <kendo-grid-column field="CARDCODE" title="Vendor Code"  ></kendo-grid-column>
+            <kendo-grid-column field="CARDNAME" title="Vendor Name"></kendo-grid-column>
             
             <!-- xlsx template start -->
             <!-- <kendo-grid-excel fileName="Sales-order.xlsx"></kendo-grid-excel> -->
