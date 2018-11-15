@@ -35,7 +35,9 @@ export class SigninComponent implements OnInit {
   licenseData: LicenseData[];
   selectedItem: string = "hello";
   whsList: WHS[];
-  defaultWHS = {OPTM_WHSE: "Select Warehouse", BPLid: 0};
+  defaultWHS = { OPTM_WHSE: "Select Warehouse", BPLid: 0 };
+  public companyName: Array<string>;
+  // public selectedWHS: WHS = { OPTM_WHSE: "Select Warehouse", BPLid: 0 };
 
   constructor(private router: Router, private httpcallservice: HttpCallServiceService) { }
 
@@ -47,6 +49,7 @@ export class SigninComponent implements OnInit {
     if (this.getCookie('cookieEmail') != '' && this.getCookie('cookiePassword') != '') {
       this.userName = this.getCookie('cookieEmail');
       this.password = this.getCookie('cookiePassword');
+      this.isRemember = true;
     } else {
       this.userName = '';
       this.password = '';
@@ -60,27 +63,26 @@ export class SigninComponent implements OnInit {
 
     this.httpcallservice.getPSURL().subscribe(
       data => {
-        // alert("get PSURL success");
         localStorage.setItem("PSURLFORADMIN", data);
       },
       error => {
         alert("get PSURL Failed");
       }
     );
+    localStorage.setItem("WHS", "Select Warehouse");
   }
 
   public setWarehouseList() {
+    
     // debugger
-    // if (this.whsList.length < 1) {
-      this.httpcallservice.getWHS().subscribe(
-        data => {
-          this.whsList = data.Table;
-        },
-        error => {
-          alert("get setWarehouseList Failed");
-        }
-      );
-    // }
+    this.httpcallservice.getWHS().subscribe(
+      data => {
+        this.whsList = data.Table;
+      },
+      error => {
+        alert("get setWarehouseList Failed");
+      }
+    );
   }
 
   /**
@@ -120,28 +122,17 @@ export class SigninComponent implements OnInit {
    * Function for login
    */
   public async login() {
-
+    if(this.userName == "" || this.password == ""){
+      alert("username or password cannot be blank");
+      return;
+    }
     this.showLoader = true;
     if (!this.isCompleteLoginVisible) {
       this.httpcallservice.ValidateUserLogin(this.userName, this.password).subscribe(
         data => {
           this.userDetails = data.Table;
           localStorage.setItem("UserId", this.userName);
-
-          this.showLoader = false;
-          if (this.userDetails[0].OPTM_ACTIVE == 0) {
-            // show msg
-            return;
-          }
-          this.isCompleteLoginVisible = true;
-          // sessionStorage.setItem("", this.isCompleteLoginVisible);
-          if (this.userDetails.length > 1) {
-
-          } else {
-            localStorage.setItem("CompID", this.userDetails[0].OPTM_COMPID);
-            this.companyName = [this.userDetails[0].OPTM_COMPID];
-            this.selectedItem = this.companyName[0];
-          }
+          this.handleValidationUserSuccessResponse();
         },
         error => {
           this.showLoader = false;
@@ -149,14 +140,16 @@ export class SigninComponent implements OnInit {
         }
       );
     } else {
+      debugger
+      if (localStorage.getItem("WHS") == 'Select Warehouse') {
+        this.showLoader = false;
+        alert("Please Select Warehouse!");
+        return;
+      }
       this.httpcallservice.getLicenseData().subscribe(
         data => {
-          debugger
-          this.showLoader = false;
           this.licenseData = data;
-          localStorage.setItem("GUID", this.licenseData[0].GUID);
-          this.router.navigateByUrl('home/dashboard');
-          // }, 500);
+          this.handleLicenseDataSuccessResponse();
         },
         error => {
           this.showLoader = false;
@@ -164,46 +157,59 @@ export class SigninComponent implements OnInit {
         }
       );
     }
-    // code for remember me
-    if (this.isRemember == true) {
-      this.setCookie('cookieEmail', this.userName, 365);
-      this.setCookie('cookiePassword', this.password, 365);
+
+  }
+
+  private handleValidationUserSuccessResponse() {
+    this.showLoader = false;
+    if (this.userDetails[0].OPTM_ACTIVE == 0) {
+      // show msg
+      return;
     }
+    document.getElementById("connectbtn").innerText = "Login";
+    this.isCompleteLoginVisible = true;
+    if (this.userDetails.length > 1) {
 
+    } else {
+      localStorage.setItem("CompID", this.userDetails[0].OPTM_COMPID);
+      this.companyName = [this.userDetails[0].OPTM_COMPID];
+      this.selectedItem = this.companyName[0];
+    }
   }
 
-  /**
-   * Function for redirect to forget password
-   */
-  navigateToResetPassword() {
-    this.router.navigateByUrl('account/resetpassword');
-  }
-
-
-  public companyName: Array<string> = [
-    'company1', 'company2', 'company3'
-  ];
-
-  public warehouseName: Array<string> = [
-    'warehouse1', 'warehouse2', 'warehouse3'
-  ];
-  // public value = [ 'company1']
-
-  // public listItems: Array<string> = [
-  //   'Baseball', 'Basketball', 'Cricket', 'Field Hockey',
-  //   'Football', 'Table Tennis', 'Tennis', 'Volleyball'
-  // ];
-
-  // public value = [ 'Basketball', 'Cricket' ]
-
-
-  //Rishabh Code:
-
-  public OnOptionChange(value: WHS){
+  private handleLicenseDataSuccessResponse() {
     debugger
-    localStorage.setItem("WHS", value.OPTM_WHSE);
-    // alert(value.OPTM_WHSE);
+    this.showLoader = false;
+    if (this.licenseData.length > 1) {
+      if (this.licenseData[1].ErrMessage == "" || this.licenseData[1].ErrMessage == null) {
+        if (this.licenseData[0].Message == "True") {
+          localStorage.setItem("GUID", this.licenseData[1].GUID);
+          localStorage.setItem("CompID", this.userDetails[0].OPTM_COMPID);
+          // code for remember me
+          if (this.isRemember == true) {
+            this.setCookie('cookieEmail', this.userName, 365);
+            this.setCookie('cookiePassword', this.password, 365);
+          } else {
+            this.setCookie('cookieEmail', "", 365);
+            this.setCookie('cookiePassword', "", 365);
+          }
+          this.router.navigateByUrl('home/dashboard');
+        } else {
+          alert(this.licenseData[0].Message + " " + this.licenseData[0].Token);
+        }
+      } else {
+        alert(this.licenseData[1].ErrMessage);
+      }
+    } else {
+      alert(this.licenseData[0].ErrMessage);
+    }
   }
 
+  public OnOptionChange(value: WHS) {
+    localStorage.setItem("WHS", value.OPTM_WHSE);
+  }
 
+  public OnCompanySelectionChange(value: string) {
+    localStorage.setItem("CompID", value);
+  }
 }
