@@ -71,3 +71,31 @@ export const vendorCodeName = [
         'name':'sea corp'
     }
 ]
+
+export const inspectionGrid = [
+    {
+        'code':'v100',
+        'openqty':15,
+        'rcvqty':5
+    },
+    {
+        'code':'v101',
+        'openqty':14,
+        'rcvqty':5
+    },
+    {
+        'code':'v102',
+        'openqty':12,
+        'rcvqty':5
+    },
+    {
+        'code':'v103',
+        'openqty':11,
+        'rcvqty':5
+    },
+    {
+        'code':'v104',
+        'openqty':10,
+        'rcvqty':5
+    }
+]
