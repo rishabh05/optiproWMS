@@ -14,7 +14,7 @@
               <div class="form-group row">
                 <label class="col-sm-4 col-form-label">Future POs</label>
                 <div class="col-sm-8 opti_vertical-align">
-                  <input type="checkbox" id="ch10" class="k-checkbox" />
+                  <input type="checkbox" id="ch10" class="k-checkbox" name="futurepo" ([ngModel])="futurepo"/>
                   <label class="col-sm-4 k-checkbox-label" for="ch10"></label>
                 </div>
               </div>
@@ -22,8 +22,8 @@
               <div class="form-group row">
                 <label class="col-sm-4 col-form-label">PO #</label>
                 <div class="col-sm-8 opti_field-lookup">
-                  <input class="k-textbox" />
-                  <button (click)="openVerticallyCentered(polookup)" class="opti_po-lookup" title="PO Lookup"><svg-icon src="{{imgPath}}/common/download.svg" [svgStyle]="{ 'width.px':16, 'height.px':16, 'fill':'#fff'}"></svg-icon></button>
+                  <input class="k-textbox" id="po" name="po" [(ngModel)]=poCode placeholder="Please select PO" />
+                  <button (click)="onPOlookupClick(polookup)" class="opti_po-lookup" title="PO Lookup"><svg-icon src="{{imgPath}}/common/download.svg" [svgStyle]="{ 'width.px':16, 'height.px':16, 'fill':'#fff'}"></svg-icon></button>
                   <button (click)="showInspectionGrid(true)" class="opti_inspection" title="Inspection"><svg-icon src="{{imgPath}}/common/download.svg" [svgStyle]="{ 'width.px':16, 'height.px':16, 'fill':'#fff'}"></svg-icon></button>
                 </div>
               </div>
@@ -31,8 +31,8 @@
               <div class="form-group row">
                 <label class="col-sm-4 col-form-label">Item</label>
                 <div class="col-sm-8 opti_field-lookup">
-                  <input class="k-textbox" />
-                  <button (click)="openVerticallyCentered(itemlookup)" title="Item Lookup"><svg-icon src="{{imgPath}}/common/download.svg" [svgStyle]="{ 'width.px':16, 'height.px':16, 'fill':'#fff'}"></svg-icon></button>
+                  <input class="k-textbox" id="item" name="item" [(ngModel)]=item placeholder="Please select Item" />
+                  <button (click)="onItemlookupClick(itemlookup)" title="Item Lookup"><svg-icon src="{{imgPath}}/common/download.svg" [svgStyle]="{ 'width.px':16, 'height.px':16, 'fill':'#fff'}"></svg-icon></button>
                 </div>
               </div>
 
@@ -45,7 +45,7 @@
       <div class="" style="margin-top: 15px;" *ngIf="isInspectionGrid==true">
         <div class="col-md-12">
             <kendo-grid 
-            [kendoGridBinding]="gridInspection" 
+            [kendoGridBinding]="openPOLinesModel" 
             [resizable]="false" 
             [pageSize]="50" 
             [pageable]="true" 
@@ -54,7 +54,7 @@
             [groupable]=isColumnGroup 
             [columnMenu]="{ columnChooser: false }" 
             [selectable]="true" 
-            (selectionChange)="openSalesOrderDetailOnSelectSalesOrder($event)"
+            (selectionChange)="onRowSelectOpenAutoLot($event)"
             #gridItem>
                 <!-- [kendoGridBinding]="gridData | customPipeItem:searchRequest"  -->
                 <!-- (selectionChange)="openInqueryDetailOnSelectInquery(gridItem, $event, true, gridItem)" -->
@@ -94,9 +94,9 @@
 
                 </ng-template>
 
-                <kendo-grid-column field="code" title="Item Code"  ></kendo-grid-column>
-                <kendo-grid-column field="openqty" title="Open Quantity"  class="text-right"></kendo-grid-column>
-                <kendo-grid-column field="rcvqty" title="Receive Quantity"  class="text-right"></kendo-grid-column>
+                <kendo-grid-column field="CardCode" title="Item Code"  ></kendo-grid-column>
+                <kendo-grid-column field="OPENQTY" title="Open Quantity"  class="text-right"></kendo-grid-column>
+                <kendo-grid-column field="RPTQTY" title="Receive Quantity"  class="text-right"></kendo-grid-column>
                 
                 <!-- xlsx template start -->
                 <!-- <kendo-grid-excel fileName="Sales-order.xlsx"></kendo-grid-excel> -->
@@ -136,7 +136,7 @@
     <div class="modal-body text-center" style="padding: 20px;">
         
         <kendo-grid 
-        [kendoGridBinding]="gridData2" 
+        [kendoGridBinding]="polist" 
         [resizable]="false" 
         [pageSize]="50" 
         [pageable]="true" 
@@ -145,7 +145,7 @@
         [groupable]=isColumnGroup 
         [columnMenu]="{ columnChooser: false }" 
         [selectable]="true" 
-        (selectionChange)="selectVendorCode($event)"
+        (selectionChange)="onPOSelect($event)"
         #gridItem>
             
         <!-- grid template start -->
@@ -183,8 +183,10 @@
 
             </ng-template>
 
-            <kendo-grid-column field="code" title="Vendor Code"  ></kendo-grid-column>
-            <kendo-grid-column field="name" title="Vendor Name"></kendo-grid-column>
+            <kendo-grid-column field="DocNum" title="PO#"  ></kendo-grid-column>
+            <kendo-grid-column field="DocDueDate" title="Del. Date"></kendo-grid-column>
+            <kendo-grid-column field="CardCode" title="Vend. Code"></kendo-grid-column>
+            <kendo-grid-column field="CardName" title="Name"></kendo-grid-column>
             
             <!-- xlsx template start -->
             <!-- <kendo-grid-excel fileName="Sales-order.xlsx"></kendo-grid-excel> -->
@@ -211,7 +213,7 @@
     <div class="modal-body text-center" style="padding: 20px;">
         
         <kendo-grid 
-        [kendoGridBinding]="gridData2" 
+        [kendoGridBinding]="GRPOItemList" 
         [resizable]="false" 
         [pageSize]="50" 
         [pageable]="true" 
@@ -220,7 +222,7 @@
         [groupable]=isColumnGroup 
         [columnMenu]="{ columnChooser: false }" 
         [selectable]="true" 
-        (selectionChange)="selectVendorCode($event)"
+        (selectionChange)="onItemSelect($event)"
         #gridItem>
             
         <!-- grid template start -->
@@ -258,8 +260,8 @@
 
             </ng-template>
 
-            <kendo-grid-column field="code" title="Vendor Code"  ></kendo-grid-column>
-            <kendo-grid-column field="name" title="Vendor Name"></kendo-grid-column>
+            <kendo-grid-column field="ItemCode" title="Item Code"  ></kendo-grid-column>
+            <kendo-grid-column field="ItemName" title="Item Name"></kendo-grid-column>
             
             <!-- xlsx template start -->
             <!-- <kendo-grid-excel fileName="Sales-order.xlsx"></kendo-grid-excel> -->

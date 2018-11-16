@@ -8,6 +8,7 @@ import { HttpCallServiceService } from '../../services/http-call-service.service
 import { Vender } from '../../models/Vender';
 import { Router } from '@angular/router';
 import { InboundMasterComponent } from '../inbound-master.component';
+declare var $:any;
 
 @Component({
   selector: 'app-vender-selection',
@@ -30,8 +31,8 @@ export class VenderSelectionComponent implements OnInit {
   public gridData2: any[];
 
   venders: Vender[];
-  venderCode: String = "";
-  venderName: String = "";
+  venderCode: string = "";
+  venderName: string = "";
 
 
   // UI Section
@@ -69,20 +70,7 @@ export class VenderSelectionComponent implements OnInit {
     }, 1000);
   }
 
-  /**
-   * 
-  */
-  getVendorCodeAndName() {
-    // this.showLoader = true;
-    this.gridData2 = this.venders;
-    // setTimeout(() => {
-    //   this.showLoader = false;
-    // }, 1000);
-  }
-
-
-
-  onFilterChange(checkBox: any, grid: GridComponent) {
+ onFilterChange(checkBox: any, grid: GridComponent) {
     if (checkBox.checked == false) {
       this.clearFilter(grid);
     }
@@ -92,13 +80,13 @@ export class VenderSelectionComponent implements OnInit {
     //grid.filter.filters=[];
   }
 
-  openVerticallyCentered(content) {
+  onVenderLookupClick(content) {
+    debugger
     this.httpCallServiceService.getVenderList().subscribe(
       (data: any) => {
         console.log(data);
         debugger
         this.venders = data.Table;
-        this.getVendorCodeAndName();
         this.modalService.open(content, { centered: true });
       },
       error => {
@@ -109,17 +97,16 @@ export class VenderSelectionComponent implements OnInit {
   }
 
   selectVendorCode(selection) {
-    debugger
     const vender = selection.selectedRows[0].dataItem;
     this.venderCode = vender.CARDCODE;
     this.venderName = vender.CARDNAME;
     // modal.dismiss
-    // $("#polist").modal('show');
+    
     // this.modalService.dismissAll;
   }
 
   public onNextClick(){
-    // this.router.navigateByUrl('polist');
+    this.inboundMasterComponent.selectedVernder = this.venderCode;
     this.inboundMasterComponent.inboundComponent = 2;
   }
 }

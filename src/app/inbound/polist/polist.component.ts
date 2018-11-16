@@ -5,6 +5,10 @@ import { UIHelper } from '../../helpers/ui.helpers';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { environment } from '../../../environments/environment';
 import { InboundMasterComponent } from '../inbound-master.component';
+import { HttpCallServiceService } from '../../services/http-call-service.service';
+import { POs } from '../../models/POs';
+import { GRPOItems } from '../../models/GRPOItems';
+import { OpenPOLinesModel } from 'src/app/models/OpenPOLinesModel';
 
 @Component({
   selector: 'app-polist',
@@ -13,7 +17,8 @@ import { InboundMasterComponent } from '../inbound-master.component';
 })
 export class POListComponent implements OnInit {
 
-  constructor(private modalService: NgbModal, private inboundMasterComponent: InboundMasterComponent) { }
+  constructor(private modalService: NgbModal, private inboundMasterComponent: InboundMasterComponent,
+    private httpCallServiceService: HttpCallServiceService) { }
 
   imgPath = environment.imagePath;
   isMobile: boolean;
@@ -22,11 +27,15 @@ export class POListComponent implements OnInit {
   showLoader: boolean = false;
   searchRequest: string = '';
 
-  public gridInspection: any[];
-  public gridData2: any[];
+  isInspectionGrid: boolean = false;
 
-  isInspectionGrid:boolean = false;
-  
+  polist: POs[];
+  GRPOItemList: GRPOItems[];
+  openPOLinesModel: OpenPOLinesModel[];
+  poCode: string='';
+  item: string="";
+  futurepo: boolean=false;
+
   // UI Section
   @HostListener('window:resize', ['$event'])
   onResize(event) {
@@ -34,7 +43,7 @@ export class POListComponent implements OnInit {
   }
   // End UI Section
 
-  
+
 
   ngOnInit() {
     // Apply class on body start
@@ -46,52 +55,76 @@ export class POListComponent implements OnInit {
 
     this.isMobile = UIHelper.isMobile();
 
-    this.getInspectionGrid();
-    this.getVendorCodeAndName();
-
   }
 
-
-  /**
-   * Method to get list of inquries from server.
-  */
-  public getInspectionGrid() {
-    this.showLoader = true;
-    this.gridInspection = inspectionGrid;
-    setTimeout(()=>{    
-      this.showLoader = false;
-    }, 1000);
+  onItemlookupClick(content) {
+    this.httpCallServiceService.getItemList(this.futurepo, this.inboundMasterComponent.selectedVernder,
+      this.poCode).subscribe(
+        (data: any) => {
+          console.log(data);
+          debugger
+          this.GRPOItemList = data.Table;
+          this.modalService.open(content, { centered: true });
+        },
+        error => {
+          console.log("Error: ", error);
+          alert("fail");
+        }
+      );
   }
 
-  /**
-   * 
-  */
-  getVendorCodeAndName(){
-    this.showLoader = true;
-    this.gridData2 = vendorCodeName;
-    setTimeout(()=>{    
-      this.showLoader = false;
-    }, 1000);
-  }
-
-
-
-  onFilterChange(checkBox:any,grid:GridComponent)
-  {
-    if(checkBox.checked==false){
+  onFilterChange(checkBox: any, grid: GridComponent) {
+    if (checkBox.checked == false) {
       this.clearFilter(grid);
     }
   }
 
-  clearFilter(grid:GridComponent){      
+  clearFilter(grid: GridComponent) {
     //grid.filter.filters=[];
   }
 
-  openVerticallyCentered(content) {
-    this.modalService.open(content, { centered: true });
-  }  
+  onPOlookupClick(content) {
+    debugger
+    this.httpCallServiceService.getPOList(this.futurepo, 
+      this.inboundMasterComponent.selectedVernder).subscribe(
+      (data: any) => {
+        console.log(data);
+        debugger
+        this.polist = data.Table;
+        this.modalService.open(content, { centered: true });
+      },
+      error => {
+        console.log("Error: ", error);
+        alert("fail");
+      }
+    );
 
-  selectVendorCode(e){
+  }
+
+  onPOSelect(selection) {
+    debugger
+    const po = selection.selectedRows[0].dataItem;
+    this.poCode = po.DocNum;
+  }
+
+  onItemSelect(selection) {
+    debugger
+    const item = selection.selectedRows[0].dataItem;
+    this.item = item.ItemCode;
+
+    this.httpCallServiceService.GetOpenPOLines(this.futurepo, this.item,
+      this.poCode).subscribe(
+      (data: any) => {
+        console.log(data);
+        debugger
+        this.openPOLinesModel = data.Table;
+        this.modalService.open(selection, { centered: true });
+      },
+      error => {
+        console.log("Error: ", error);
+        alert("fail");
+      }
+    );
     
   }
 
@@ -99,11 +132,31 @@ export class POListComponent implements OnInit {
    * Show Inspection Grid 
    * @param status 
   */
-  showInspectionGrid(status){
+  showInspectionGrid(status) {
     this.isInspectionGrid = status;
   }
 
-  public onNextClick(){
+  onRowSelectOpenAutoLot(selection){
+    debugger
+    const item = selection.selectedRows[0].dataItem;
+    this.item = item.ItemCode;
+
+    this.httpCallServiceService.GetOpenPOLines(this.futurepo, this.item,
+      this.inboundMasterComponent.selectedVernder).subscribe(
+      (data: any) => {
+        console.log(data);
+        debugger
+        this.openPOLinesModel = data.Table;
+        this.modalService.open(selection, { centered: true });
+      },
+      error => {
+        console.log("Error: ", error);
+        alert("fail");
+      }
+    );
+  }
+
+  public onNextClick() {
     // this.router.navigateByUrl('polist');
     this.inboundMasterComponent.inboundComponent = 3;
   }

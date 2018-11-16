@@ -16,6 +16,8 @@ export class HttpCallServiceService {
   private POlistUrl: string = "/api/GoodReceiptPO/GetPOList";
   private PSUrl: string = "/api/Login/GetPSURL";
   private WHS: string = "/api/login/GetWHS";
+  private getItemListUrl: string = "/api/GoodReceiptPO/GetItemList";
+  private OpenPOLinesurl: string = "/api/GoodReceiptPO/GetOpenPOLines";
 
 
   httpOptions = {
@@ -73,16 +75,17 @@ export class HttpCallServiceService {
   }
 
 
-  getPOList(vendercode: string): Observable<any> {
+  getPOList(futurepo:boolean, vendercode: string): Observable<any> {
     let jObject = {
       GoodsReceiptToken: JSON.stringify([{
         UserId: '',
         CompanyDBId: localStorage.getItem("CompID"), WhseCode: localStorage.getItem("whseId"),
-        ItemCode: '', VendorCode: "RJ-V",
-        FuturePO: false, IsCustom: false, GUID: localStorage.getItem("GUID"),
+        ItemCode: '', VendorCode: vendercode,
+        FuturePO: futurepo, IsCustom: false, GUID: localStorage.getItem("GUID"),
         UsernameForLic: localStorage.getItem("UserId")
       }])
     };
+    debugger
     return this.http.post(this.baseUrl + this.POlistUrl, jObject, this.httpOptions);
   }
 
@@ -102,5 +105,32 @@ export class HttpCallServiceService {
     };
     return this.http.post(localStorage.getItem("PSURLFORADMIN") + this.WHS, jObject,
       this.httpOptions);
+  }
+
+  getItemList(futurepo: boolean, vendercode: string, po:string): Observable<any> {
+    let jObject = {
+      GoodsReceiptToken: JSON.stringify([{
+        UserId: '',
+        CompanyDBId: localStorage.getItem("CompID"), WhseCode: localStorage.getItem("whseId"),
+        VendorCode: vendercode,
+        FuturePO: futurepo, PO: po
+      }])
+    };
+    return this.http.post(this.baseUrl + this.getItemListUrl, jObject, this.httpOptions);
+  }
+
+
+  GetOpenPOLines(futurepo: boolean, itemCode: string, po:string): Observable<any> {
+    let jObject = {
+      GoodsReceiptToken: JSON.stringify([{
+        UserId: '',
+        CompanyDBId: localStorage.getItem("CompID"), 
+        DOCNUM: po,
+        ItemCode: itemCode,
+        WhsCode: localStorage.getItem("whseId"),
+        FuturePO: futurepo
+      }])
+    };
+    return this.http.post(this.baseUrl + this.OpenPOLinesurl, jObject, this.httpOptions);
   }
 }

@@ -8,10 +8,15 @@ import { Component, OnInit } from '@angular/core';
 export class InboundMasterComponent implements OnInit {
 
   public inboundComponent: number = 1;
-  public static showvenders = true;
+  public selectedVernder: string;
   constructor() { }
 
   ngOnInit() {
   }
+
+  setSelectedVender(vender: string){
+    this.selectedVernder = vender;
+  }
+  
 
 }

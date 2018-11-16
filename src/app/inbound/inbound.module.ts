@@ -2,8 +2,8 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { InboundRoutingModule } from './inbound-routing.module';
-import { VenderSelectionComponent } from '../inbound/vender-selection/vender-selection.component';
-import { POListComponent } from '../inbound/polist/polist.component';
+import { VenderSelectionComponent } from './vender-selection/vender-selection.component';
+import { POListComponent } from './polist/polist.component';
 import { GRPOCalculationComponent } from './grpocalculation/grpocalculation.component';
 import { GridModule, ExcelModule } from '@progress/kendo-angular-grid';
 import { FormsModule } from '@angular/forms';

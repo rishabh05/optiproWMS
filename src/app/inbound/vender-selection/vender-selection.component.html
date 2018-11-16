@@ -14,7 +14,7 @@
                 <label class="col-sm-4 col-form-label">Vendor</label>
                 <div class="col-sm-8 opti_field-lookup">
                   <input class="k-textbox" id="vender" name="vender" [(ngModel)]=venderCode placeholder="Please select vender"/>
-                  <button (click)="openVerticallyCentered(vendorCodeName)"><svg-icon src="{{imgPath}}/common/download.svg" [svgStyle]="{ 'width.px':16, 'height.px':16, 'fill':'#fff'}"></svg-icon></button>
+                  <button (click)="onVenderLookupClick(vendorCodeName)"><svg-icon src="{{imgPath}}/common/download.svg" [svgStyle]="{ 'width.px':16, 'height.px':16, 'fill':'#fff'}"></svg-icon></button>
                 </div>
               </div>
 
@@ -117,7 +117,7 @@
 
 
 <!-- Lookup section start -->
-<ng-template #vendorCodeName let-modal>
+<ng-template #vendorCodeName let-modal id="modalvender" >
     <div class="modal-header">
         <h4 class="modal-title">Select Vendor Code and Name</h4>
         <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
@@ -128,7 +128,7 @@
     <div class="modal-body text-center" style="padding: 20px;">
         
         <kendo-grid 
-        [kendoGridBinding]="gridData2" 
+        [kendoGridBinding]="venders" 
         [resizable]="false" 
         [pageSize]="50" 
         [pageable]="true" 
