@@ -1,6 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
-import { CurrentSidebarInfo } from '../../models/sidebar/current-sidebar-info';
 import { HttpCallServiceService } from '../../services/http-call-service.service';
 import { ValidateUser } from '../../models/ValidateUser';
 import { LicenseData } from '../../models/LicenseData';

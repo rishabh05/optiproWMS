@@ -4,6 +4,7 @@ import { inspectionGrid, vendorCodeName } from '../../DemoData/inbound';
 import { UIHelper } from '../../helpers/ui.helpers';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { environment } from '../../../environments/environment';
+import { InboundMasterComponent } from '../inbound-master.component';
 
 @Component({
   selector: 'app-polist',
@@ -12,7 +13,7 @@ import { environment } from '../../../environments/environment';
 })
 export class POListComponent implements OnInit {
 
-  constructor(private modalService: NgbModal) { }
+  constructor(private modalService: NgbModal, private inboundMasterComponent: InboundMasterComponent) { }
 
   imgPath = environment.imagePath;
   isMobile: boolean;
@@ -102,4 +103,8 @@ export class POListComponent implements OnInit {
     this.isInspectionGrid = status;
   }
 
+  public onNextClick(){
+    // this.router.navigateByUrl('polist');
+    this.inboundMasterComponent.inboundComponent = 3;
+  }
 }

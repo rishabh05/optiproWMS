@@ -6,6 +6,8 @@ import { environment } from '../../../environments/environment';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { HttpCallServiceService } from '../../services/http-call-service.service';
 import { Vender } from '../../models/Vender';
+import { Router } from '@angular/router';
+import { InboundMasterComponent } from '../inbound-master.component';
 
 @Component({
   selector: 'app-vender-selection',
@@ -14,7 +16,8 @@ import { Vender } from '../../models/Vender';
 })
 export class VenderSelectionComponent implements OnInit {
 
-  constructor(private modalService: NgbModal, private httpCallServiceService: HttpCallServiceService) { }
+  constructor(private modalService: NgbModal, private httpCallServiceService: HttpCallServiceService,
+    private router: Router, private inboundMasterComponent: InboundMasterComponent) { }
 
   imgPath = environment.imagePath;
   isMobile: boolean;
@@ -110,7 +113,13 @@ export class VenderSelectionComponent implements OnInit {
     const vender = selection.selectedRows[0].dataItem;
     this.venderCode = vender.CARDCODE;
     this.venderName = vender.CARDNAME;
+    // modal.dismiss
+    // $("#polist").modal('show');
     // this.modalService.dismissAll;
   }
 
+  public onNextClick(){
+    // this.router.navigateByUrl('polist');
+    this.inboundMasterComponent.inboundComponent = 2;
+  }
 }

@@ -10,7 +10,6 @@ import { HttpClientModule } from '@angular/common/http';
 import { OutboundModule } from './outbound/outbound.module';
 
 
-
 @NgModule({
   declarations: [
     AppComponent,
