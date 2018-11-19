@@ -82,12 +82,20 @@ export class VenderSelectionComponent implements OnInit {
   }
 
   onVenderLookupClick(content) {
+    // this.modalService.open(content, { centered: true });
     debugger
     this.httpCallServiceService.getVenderList().subscribe(
       (data: any) => {
         console.log(data);
         debugger
-        this.venders = data.Table;
+        if(data.Table != undefined){
+          this.venders = data.Table;
+        }else{
+          alert("session expire");
+          this.router.navigateByUrl('account');
+          return;
+        }
+        
         this.modalService.open(content, { centered: true });
       },
       error => {

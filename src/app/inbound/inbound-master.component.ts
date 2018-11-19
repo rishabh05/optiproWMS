@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { AutoLot } from '../models/AutoLot';
 
 @Component({
   selector: 'app-inbound-master',
@@ -9,6 +10,8 @@ export class InboundMasterComponent implements OnInit {
 
   public inboundComponent: number = 1;
   public selectedVernder: string;
+  public autoLots: AutoLot[];
+  
   constructor() { }
 
   ngOnInit() {
@@ -18,5 +21,8 @@ export class InboundMasterComponent implements OnInit {
     this.selectedVernder = vender;
   }
   
+  setAutoLots(autoLots: AutoLot[]){
+    this.autoLots = autoLots;
+  }
 
 }

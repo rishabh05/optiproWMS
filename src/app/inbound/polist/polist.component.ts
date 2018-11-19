@@ -8,7 +8,8 @@ import { InboundMasterComponent } from '../inbound-master.component';
 import { HttpCallServiceService } from '../../services/http-call-service.service';
 import { POs } from '../../models/POs';
 import { GRPOItems } from '../../models/GRPOItems';
-import { OpenPOLinesModel } from 'src/app/models/OpenPOLinesModel';
+import { OpenPOLinesModel } from '../../models/OpenPOLinesModel';
+import { AutoLot } from 'src/app/models/AutoLot';
 
 @Component({
   selector: 'app-polist',
@@ -32,9 +33,11 @@ export class POListComponent implements OnInit {
   polist: POs[];
   GRPOItemList: GRPOItems[];
   openPOLinesModel: OpenPOLinesModel[];
-  poCode: string='';
-  item: string="";
-  futurepo: boolean=false;
+  poCode: string = '';
+  item: string = "";
+  futurepo: boolean = false;
+  autoLot: AutoLot[];
+
 
   // UI Section
   @HostListener('window:resize', ['$event'])
@@ -85,19 +88,19 @@ export class POListComponent implements OnInit {
 
   onPOlookupClick(content) {
     debugger
-    this.httpCallServiceService.getPOList(this.futurepo, 
+    this.httpCallServiceService.getPOList(this.futurepo,
       this.inboundMasterComponent.selectedVernder).subscribe(
-      (data: any) => {
-        console.log(data);
-        debugger
-        this.polist = data.Table;
-        this.modalService.open(content, { centered: true });
-      },
-      error => {
-        console.log("Error: ", error);
-        alert("fail");
-      }
-    );
+        (data: any) => {
+          console.log(data);
+          debugger
+          this.polist = data.Table;
+          this.modalService.open(content, { centered: true });
+        },
+        error => {
+          console.log("Error: ", error);
+          alert("fail");
+        }
+      );
 
   }
 
@@ -115,15 +118,51 @@ export class POListComponent implements OnInit {
   }
 
 
-  getOpenPOLines(selection){
+  getOpenPOLines(selection) {
     this.httpCallServiceService.GetOpenPOLines(this.futurepo, this.item,
       this.poCode).subscribe(
+        (data: any) => {
+          console.log(data);
+          debugger
+          this.openPOLinesModel = data.Table;
+          // this.modalService.open(selection, { centered: true });
+          this.isInspectionGrid = true;
+        },
+        error => {
+          console.log("Error: ", error);
+          alert("fail");
+        }
+      );
+  }
+
+
+  onClickOpenPOLineRowOpenAutoLot(selection) {
+    this.getAutoLot();
+  }
+
+  getAutoLot() {
+    this.httpCallServiceService.getAutoLot(this.item).subscribe(
       (data: any) => {
         console.log(data);
         debugger
-        this.openPOLinesModel = data.Table;
-        // this.modalService.open(selection, { centered: true });
-        this.isInspectionGrid = true;
+        this.autoLot = data.Table;
+
+        if (this.autoLot.length > 0) {
+        }
+        else {
+          this.autoLot.push(new AutoLot("N", this.item, "", "", "", ""));
+          // this.autoLot[0].ItemCode = this.item;
+          // this.autoLot[0].AUTOLOT = "N";
+          // this.autoLot[0].OPERATION = "";
+          // this.autoLot[0].STRING = "";
+          // this.autoLot[0].OPRTYPE = "";
+          // this.autoLot[0].LineId = "";
+        }
+
+        this.inboundMasterComponent.setAutoLots(this.autoLot);
+
+        this.isInspectionGrid = false;
+        this.inboundMasterComponent.inboundComponent = 3;
       },
       error => {
         console.log("Error: ", error);
@@ -131,20 +170,6 @@ export class POListComponent implements OnInit {
       }
     );
   }
-
-  /**
-   * Show Inspection Grid 
-   * @param status 
-  */
-  showInspectionGrid(status) {
-    this.isInspectionGrid = status;
-  }
-
-  onRowSelectOpenAutoLot(selection){
-    
-  }
-
-
 
   public onNextClick() {
     // this.router.navigateByUrl('polist');

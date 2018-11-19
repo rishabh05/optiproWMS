@@ -18,6 +18,7 @@ export class HttpCallServiceService {
   private WHS: string = "/api/login/GetWHS";
   private getItemListUrl: string = "/api/GoodReceiptPO/GetItemList";
   private OpenPOLinesurl: string = "/api/GoodReceiptPO/GetOpenPOLines";
+  private AutoLotUrl: string = "/api/GoodReceiptPO/GetAutoLot";
 
 
   httpOptions = {
@@ -132,5 +133,17 @@ export class HttpCallServiceService {
       }])
     };
     return this.http.post(this.baseUrl + this.OpenPOLinesurl, jObject, this.httpOptions);
+  }
+
+
+  getAutoLot(itemCode: string): Observable<any> {
+    let jObject = {
+      GoodsReceiptToken: JSON.stringify([{
+        UserId: '',
+        CompanyDBId: localStorage.getItem("CompID"), 
+        ItemCode: itemCode
+      }])
+    };
+    return this.http.post(this.baseUrl + this.AutoLotUrl, jObject, this.httpOptions);
   }
 }
