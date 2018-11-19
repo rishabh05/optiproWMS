@@ -99,3 +99,48 @@ export const inspectionGrid = [
         'rcvqty':5
     }
 ]
+
+export const receiveForPOItemCodeGrid = [
+    {   
+        'code':'v103',
+        'openqty':12,
+        'rcvqty':5
+    },
+    {
+        'code':'v104',
+        'openqty':13,
+        'rcvqty':5
+    },
+    {
+        'code':'v105',
+        'openqty':15,
+        'rcvqty':5
+    }
+]
+
+export const receiveForAddItemCodeGrid = [
+    {   
+        'qty':'2',
+        'bin':'01-A1'
+    },
+    {
+        'qty':'5',
+        'bin':'01-A2'
+    },
+    {
+        'qty':'6',
+        'bin':'01-A3'
+    }
+]
+
+export const receiveForBinGrid = [
+    {   
+        'binno':'01-A1'
+    },
+    {
+        'binno':'01-A2'
+    },
+    {
+        'binno':'01-A3'
+    }
+]
