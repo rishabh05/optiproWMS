@@ -111,21 +111,25 @@ export class POListComponent implements OnInit {
     debugger
     const item = selection.selectedRows[0].dataItem;
     this.item = item.ItemCode;
+    this.getOpenPOLines(selection);
+  }
 
+
+  getOpenPOLines(selection){
     this.httpCallServiceService.GetOpenPOLines(this.futurepo, this.item,
       this.poCode).subscribe(
       (data: any) => {
         console.log(data);
         debugger
         this.openPOLinesModel = data.Table;
-        this.modalService.open(selection, { centered: true });
+        // this.modalService.open(selection, { centered: true });
+        this.isInspectionGrid = true;
       },
       error => {
         console.log("Error: ", error);
         alert("fail");
       }
     );
-    
   }
 
   /**
@@ -137,24 +141,10 @@ export class POListComponent implements OnInit {
   }
 
   onRowSelectOpenAutoLot(selection){
-    debugger
-    const item = selection.selectedRows[0].dataItem;
-    this.item = item.ItemCode;
-
-    this.httpCallServiceService.GetOpenPOLines(this.futurepo, this.item,
-      this.inboundMasterComponent.selectedVernder).subscribe(
-      (data: any) => {
-        console.log(data);
-        debugger
-        this.openPOLinesModel = data.Table;
-        this.modalService.open(selection, { centered: true });
-      },
-      error => {
-        console.log("Error: ", error);
-        alert("fail");
-      }
-    );
+    
   }
+
+
 
   public onNextClick() {
     // this.router.navigateByUrl('polist');

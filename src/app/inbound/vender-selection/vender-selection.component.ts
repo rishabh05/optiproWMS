@@ -1,4 +1,4 @@
-import { Component, OnInit, HostListener } from '@angular/core';
+import { Component, OnInit, HostListener, ViewChild } from '@angular/core';
 import { purchaseOrderNumberVendor, vendorCodeName } from '../../DemoData/inbound';
 import { UIHelper } from '../../helpers/ui.helpers';
 import { GridComponent } from '@progress/kendo-angular-grid';
@@ -34,6 +34,7 @@ export class VenderSelectionComponent implements OnInit {
   venderCode: string = "";
   venderName: string = "";
 
+  // @ViewChild('closeVendorCodeGrid') closeVendorCodeGrid;
 
   // UI Section
   @HostListener('window:resize', ['$event'])
@@ -103,6 +104,7 @@ export class VenderSelectionComponent implements OnInit {
     // modal.dismiss
     
     // this.modalService.dismissAll;
+    document.getElementById('closeVendorCodeGrid').click();
   }
 
   public onNextClick(){

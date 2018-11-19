@@ -146,6 +146,7 @@ export class SigninComponent implements OnInit {
         },
         error => {
           this.showLoader = false;
+          debugger
           alert("Login Failed");
         }
       );

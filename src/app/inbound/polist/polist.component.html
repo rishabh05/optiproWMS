@@ -24,7 +24,7 @@
                 <div class="col-sm-8 opti_field-lookup">
                   <input class="k-textbox" id="po" name="po" [(ngModel)]=poCode placeholder="Please select PO" />
                   <button (click)="onPOlookupClick(polookup)" class="opti_po-lookup" title="PO Lookup"><svg-icon src="{{imgPath}}/common/download.svg" [svgStyle]="{ 'width.px':16, 'height.px':16, 'fill':'#fff'}"></svg-icon></button>
-                  <button (click)="showInspectionGrid(true)" class="opti_inspection" title="Inspection"><svg-icon src="{{imgPath}}/common/download.svg" [svgStyle]="{ 'width.px':16, 'height.px':16, 'fill':'#fff'}"></svg-icon></button>
+                  <button (click)="getOpenPOLines($event)" class="opti_inspection" title="Inspection"><svg-icon src="{{imgPath}}/common/download.svg" [svgStyle]="{ 'width.px':16, 'height.px':16, 'fill':'#fff'}"></svg-icon></button>
                 </div>
               </div>
 
@@ -94,7 +94,7 @@
 
                 </ng-template>
 
-                <kendo-grid-column field="CardCode" title="Item Code"  ></kendo-grid-column>
+                <kendo-grid-column field="ITEMCODE" title="Item Code"  ></kendo-grid-column>
                 <kendo-grid-column field="OPENQTY" title="Open Quantity"  class="text-right"></kendo-grid-column>
                 <kendo-grid-column field="RPTQTY" title="Receive Quantity"  class="text-right"></kendo-grid-column>
                 

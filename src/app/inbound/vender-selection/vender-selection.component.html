@@ -120,7 +120,7 @@
 <ng-template #vendorCodeName let-modal id="modalvender" >
     <div class="modal-header">
         <h4 class="modal-title">Select Vendor Code and Name</h4>
-        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+        <button #closeVendorCodeGrid id="closeVendorCodeGrid" type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
             <span aria-hidden="true">&times;</span>
         </button>
     </div>
