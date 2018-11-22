@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AutoLot } from '../models/AutoLot';
+import { OpenPOLinesModel } from '../models/OpenPOLinesModel';
 
 @Component({
   selector: 'app-inbound-master',
@@ -11,6 +12,7 @@ export class InboundMasterComponent implements OnInit {
   public inboundComponent: number = 1;
   public selectedVernder: string;
   public autoLots: AutoLot[];
+  public openPOmodel: OpenPOLinesModel;
   
   constructor() { }
 
@@ -25,4 +27,7 @@ export class InboundMasterComponent implements OnInit {
     this.autoLots = autoLots;
   }
 
+  setClickedItemDetail(openPOmodel){
+    this.openPOmodel = openPOmodel;
+  }
 }

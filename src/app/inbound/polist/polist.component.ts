@@ -9,7 +9,7 @@ import { HttpCallServiceService } from '../../services/http-call-service.service
 import { POs } from '../../models/POs';
 import { GRPOItems } from '../../models/GRPOItems';
 import { OpenPOLinesModel } from '../../models/OpenPOLinesModel';
-import { AutoLot } from 'src/app/models/AutoLot';
+import { AutoLot } from '../../models/AutoLot';
 
 @Component({
   selector: 'app-polist',
@@ -33,6 +33,7 @@ export class POListComponent implements OnInit {
   polist: POs[];
   GRPOItemList: GRPOItems[];
   openPOLinesModel: OpenPOLinesModel[];
+  openPOLineModel: OpenPOLinesModel;
   poCode: string = '';
   item: string = "";
   futurepo: boolean = false;
@@ -65,7 +66,7 @@ export class POListComponent implements OnInit {
       this.poCode).subscribe(
         (data: any) => {
           console.log(data);
-          debugger
+          
           this.GRPOItemList = data.Table;
           this.modalService.open(content, { centered: true });
         },
@@ -87,12 +88,12 @@ export class POListComponent implements OnInit {
   }
 
   onPOlookupClick(content) {
-    debugger
+    
     this.httpCallServiceService.getPOList(this.futurepo,
-      this.inboundMasterComponent.selectedVernder).subscribe(
+      this.inboundMasterComponent.selectedVernder, this.item).subscribe(
         (data: any) => {
           console.log(data);
-          debugger
+          
           this.polist = data.Table;
           this.modalService.open(content, { centered: true });
         },
@@ -105,16 +106,17 @@ export class POListComponent implements OnInit {
   }
 
   onPOSelect(selection) {
-    debugger
+    
     const po = selection.selectedRows[0].dataItem;
     this.poCode = po.DocNum;
+    document.getElementById('POGridclosebutton').click();
   }
 
   onItemSelect(selection) {
-    debugger
     const item = selection.selectedRows[0].dataItem;
     this.item = item.ItemCode;
     this.getOpenPOLines(selection);
+    document.getElementById('Itemclosebutton').click();
   }
 
 
@@ -123,9 +125,8 @@ export class POListComponent implements OnInit {
       this.poCode).subscribe(
         (data: any) => {
           console.log(data);
-          debugger
+          
           this.openPOLinesModel = data.Table;
-          // this.modalService.open(selection, { centered: true });
           this.isInspectionGrid = true;
         },
         error => {
@@ -137,29 +138,27 @@ export class POListComponent implements OnInit {
 
 
   onClickOpenPOLineRowOpenAutoLot(selection) {
-    this.getAutoLot();
+    
+    const poline = selection.selectedRows[0].dataItem;
+    this.getAutoLot(poline.ITEMCODE);
   }
 
-  getAutoLot() {
-    this.httpCallServiceService.getAutoLot(this.item).subscribe(
+  getAutoLot(itemCode: string) {
+    this.httpCallServiceService.getAutoLot(itemCode).subscribe(
       (data: any) => {
         console.log(data);
-        debugger
+        
         this.autoLot = data.Table;
 
         if (this.autoLot.length > 0) {
         }
         else {
-          this.autoLot.push(new AutoLot("N", this.item, "", "", "", ""));
-          // this.autoLot[0].ItemCode = this.item;
-          // this.autoLot[0].AUTOLOT = "N";
-          // this.autoLot[0].OPERATION = "";
-          // this.autoLot[0].STRING = "";
-          // this.autoLot[0].OPRTYPE = "";
-          // this.autoLot[0].LineId = "";
+          this.autoLot.push(new AutoLot("N", itemCode, "", "", "", ""));
         }
 
         this.inboundMasterComponent.setAutoLots(this.autoLot);
+        this.openPOLineModel = this.openPOLinesModel.find(e=> e.ITEMCODE == itemCode);
+        this.inboundMasterComponent.setClickedItemDetail(this.openPOLineModel);
 
         this.isInspectionGrid = false;
         this.inboundMasterComponent.inboundComponent = 3;
@@ -169,10 +168,5 @@ export class POListComponent implements OnInit {
         alert("fail");
       }
     );
-  }
-
-  public onNextClick() {
-    // this.router.navigateByUrl('polist');
-    this.inboundMasterComponent.inboundComponent = 3;
   }
 }

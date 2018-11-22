@@ -1,166 +1,150 @@
 <div class="opti_rcv-for-po-list h-100 opti_position-relative opti_content-section" [perfectScrollbar]="">
-  <div class="container-fluid">
-    <div class="row">
-      
-      <div class="col-md-12">
-        <h4>Receive for PO: 953</h4>
-      </div>
-      
-      <div class="col-md-12">
-          <kendo-grid 
-          [kendoGridBinding]="gridData" 
-          [resizable]="false" 
-          [pageSize]="50" 
-          [pageable]="true" 
-          [sortable]="true"  
-          [filterable]=isColumnFilter1
-          [groupable]=isColumnGroup1 
-          [columnMenu]="{ columnChooser: false }" 
-          [selectable]="true" 
-          #gridItem>
-              <!-- [kendoGridBinding]="gridData | customPipeItem:searchRequest"  -->
-              <!-- (selectionChange)="openInqueryDetailOnSelectInquery(gridItem, $event, true, gridItem)" -->
+    <div class="container-fluid">
+        <div class="row">
 
-              <!-- grid template start -->
-              <ng-template kendoGridToolbarTemplate>
-                  <!-- show hide column start show hide -->
-                  <kendo-grid-column-chooser class="float-left"></kendo-grid-column-chooser>
+            <div class="col-md-12">
+                <h4>Receive for PO: {{Ponumber}}</h4>
+            </div>
 
-                  <!-- checkbox -->
-                  <form class="k-form opti_show-hide-grid-column-filter float-left">
-                      <div class="k-form-field float-left">
-                          <input #chkFilter type="checkbox" (change)="onFilterChange(chkFilter,gridItem)" id="opti_RcvItemColumnFilterID" [(ngModel)]="isColumnFilter1" class="k-checkbox" name="columnfilter" />
-                          <label class="k-checkbox-label" for="opti_RcvItemColumnFilterID">Enable Filter</label>
-                      </div>
+            <div class="col-md-12">
+                <kendo-grid [kendoGridBinding]="openPOLineModel" [resizable]="false" [pageSize]="50" [pageable]="true" [sortable]="true"
+                    [filterable]=isColumnFilter1 [groupable]=isColumnGroup1 [columnMenu]="{ columnChooser: false }" [selectable]="true"
+                    #gridItem>
+                    <!-- [kendoGridBinding]="gridData | customPipeItem:searchRequest"  -->
+                    <!-- (selectionChange)="openInqueryDetailOnSelectInquery(gridItem, $event, true, gridItem)" -->
 
-                      <div class="k-form-field float-left">
-                          <input type="checkbox" id="opti_RcvItemColumnGroupID"  [(ngModel)]="isColumnGroup1" class="k-checkbox" name="columnGroup" />
-                          <label class="k-checkbox-label" for="opti_RcvItemColumnGroupID">Enable Grouping</label>
-                      </div>
-                  </form>
+                    <!-- grid template start -->
+                    <ng-template kendoGridToolbarTemplate>
+                        <!-- show hide column start show hide -->
+                        <kendo-grid-column-chooser class="float-left"></kendo-grid-column-chooser>
 
-              </ng-template>
+                        <!-- checkbox -->
+                        <form class="k-form opti_show-hide-grid-column-filter float-left">
+                            <div class="k-form-field float-left">
+                                <input #chkFilter type="checkbox" (change)="onFilterChange(chkFilter,gridItem)" id="opti_RcvItemColumnFilterID" [(ngModel)]="isColumnFilter1"
+                                    class="k-checkbox" name="columnfilter" />
+                                <label class="k-checkbox-label" for="opti_RcvItemColumnFilterID">Enable Filter</label>
+                            </div>
 
-              <kendo-grid-column field="code" title="Item Code" ></kendo-grid-column>
-              <kendo-grid-column field="openqty" title="Open Quantity"  class="text-right"></kendo-grid-column>
-              <kendo-grid-column field="rcvqty" title="Receive Quantity"  class="text-right"></kendo-grid-column>
-              <kendo-grid-column field="" title="UOM">
-                  <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
-                      <kendo-dropdownlist class="form-control" [data]="listItems" [value]="'Normal'"></kendo-dropdownlist>
-                  </ng-template>
-              </kendo-grid-column>
-              
-          </kendo-grid>
-      </div>   
+                            <div class="k-form-field float-left">
+                                <input type="checkbox" id="opti_RcvItemColumnGroupID" [(ngModel)]="isColumnGroup1" class="k-checkbox" name="columnGroup"
+                                />
+                                <label class="k-checkbox-label" for="opti_RcvItemColumnGroupID">Enable Grouping</label>
+                            </div>
+                        </form>
 
-      <!-- form section start   -->
-      <div class="col-md-6 opti_spacetopnbtm">
-        <div class="card">
-          <div class="card-body opti_bootstrap-form">
-              <div class="form-group row">
-                <label class="col-sm-4 col-form-label">Receiving Bin</label>
-                <div class="col-sm-8 opti_field-lookup">
-                  <input class="k-textbox" id="vender" name="bin" [(ngModel)]=bin />
-                  <button (click)="onVenderLookupClick(rcvBin)"><svg-icon src="{{imgPath}}/common/download.svg" [svgStyle]="{ 'width.px':16, 'height.px':16, 'fill':'#fff'}"></svg-icon></button>
+                    </ng-template>
+
+                    <kendo-grid-column field="ITEMCODE" title="Item Code"></kendo-grid-column>
+                    <kendo-grid-column field="OPENQTY" title="Open Quantity" class="text-right"></kendo-grid-column>
+                    <kendo-grid-column field="RPTQTY" title="Receive Quantity" class="text-right"></kendo-grid-column>
+                    <kendo-grid-column field="UOM1" title="UOM">
+                        <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                            <kendo-dropdownlist class="form-control" name="uomSelectedVal"
+                             [(ngModel)]="uomSelectedVal" [data]="dataItem.UOMList" textField="UomName" valueField="UomCode"></kendo-dropdownlist>
+                        </ng-template>
+                    </kendo-grid-column>
+
+                </kendo-grid>
+            </div>
+
+            <!-- form section start   -->
+            <div class="col-md-6 opti_spacetopnbtm">
+                <div class="card">
+                    <div class="card-body opti_bootstrap-form">
+                        <div class="form-group row">
+                            <label class="col-sm-4 col-form-label">Receiving Bin</label>
+                            <div class="col-sm-8 opti_field-lookup">
+                                <input class="k-textbox" id="RecvbBinvalue" name="RecvbBinvalue" [(ngModel)]=RecvbBinvalue 
+                                (focusout)="focusOutFromBin()"/>
+                                <button (click)="onRecvBinLookupClick(rcvBin)">
+                                    <svg-icon src="{{imgPath}}/common/download.svg" [svgStyle]="{ 'width.px':16, 'height.px':16, 'fill':'#fff'}"></svg-icon>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label class="col-sm-4 col-form-label">Quantity</label>
+                            <div class="col-sm-8 opti_field-lookup">
+                                <input class="k-textbox" id="vender" name="qty" [(ngModel)]=qty />
+                                <button (click)="addQuantity(event)">
+                                    <svg-icon src="{{imgPath}}/common/download.svg" [svgStyle]="{ 'width.px':16, 'height.px':16, 'fill':'#fff'}"></svg-icon>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-              </div>
+            </div>
+            <!-- form section end   -->
 
-              <div class="form-group row">
-                <label class="col-sm-4 col-form-label">Quantity</label>
-                <div class="col-sm-8 opti_field-lookup">
-                  <input class="k-textbox" id="vender" name="qty" [(ngModel)]=qty />
-                  <button (click)="addQuantity(event)"><svg-icon src="{{imgPath}}/common/download.svg" [svgStyle]="{ 'width.px':16, 'height.px':16, 'fill':'#fff'}"></svg-icon></button>
-                </div>
-              </div>
-          </div>
+            <div class="col-md-12">
+                <kendo-grid [kendoGridBinding]="recvingQuantityBinArray"  [sortable]="true"  [selectable]="true" #gridItem>
+                    <!-- [kendoGridBinding]="gridData | customPipeItem:searchRequest"  -->
+                    <!-- (selectionChange)="openInqueryDetailOnSelectInquery(gridItem, $event, true, gridItem)" -->
+
+                    <!-- grid template start -->
+                    <ng-template kendoGridToolbarTemplate>
+                        <!-- show hide column start show hide -->
+                        <kendo-grid-column-chooser class="float-left"></kendo-grid-column-chooser>
+
+                        <!-- checkbox -->
+                        <form class="k-form opti_show-hide-grid-column-filter float-left">
+                            <div class="k-form-field float-left">
+                                <input #chkFilter type="checkbox" (change)="onFilterChange(chkFilter,gridItem)" id="opti_RcvItemAddColumnFilterID" [(ngModel)]="isColumnFilter2"
+                                    class="k-checkbox" name="columnfilter" />
+                                <label class="k-checkbox-label" for="opti_RcvItemAddColumnFilterID">Enable Filter</label>
+                            </div>
+
+                            <div class="k-form-field float-left">
+                                <input type="checkbox" id="opti_RcvItemAddColumnGroupID" [(ngModel)]="isColumnGroup2" class="k-checkbox" name="columnGroup"
+                                />
+                                <label class="k-checkbox-label" for="opti_RcvItemAddColumnGroupID">Enable Grouping</label>
+                            </div>
+                        </form>
+
+                    </ng-template>
+
+                    <kendo-grid-column field="Quantity" title="Quantity" class="text-right"></kendo-grid-column>
+                    <kendo-grid-column field="Bin" title="Bin"></kendo-grid-column>
+                </kendo-grid>
+            </div>
+
         </div>
-      </div>
-      <!-- form section end   -->
-
-      <div class="col-md-12">
-          <kendo-grid 
-          [kendoGridBinding]="gridData3" 
-          [resizable]="false" 
-          [pageSize]="50" 
-          [pageable]="true" 
-          [sortable]="true"  
-          [filterable]=isColumnFilter2
-          [groupable]=isColumnGroup2 
-          [columnMenu]="{ columnChooser: false }" 
-          [selectable]="true" 
-          #gridItem>
-              <!-- [kendoGridBinding]="gridData | customPipeItem:searchRequest"  -->
-              <!-- (selectionChange)="openInqueryDetailOnSelectInquery(gridItem, $event, true, gridItem)" -->
-
-              <!-- grid template start -->
-              <ng-template kendoGridToolbarTemplate>
-                  <!-- show hide column start show hide -->
-                  <kendo-grid-column-chooser class="float-left"></kendo-grid-column-chooser>
-
-                  <!-- checkbox -->
-                  <form class="k-form opti_show-hide-grid-column-filter float-left">
-                      <div class="k-form-field float-left">
-                          <input #chkFilter type="checkbox" (change)="onFilterChange(chkFilter,gridItem)" id="opti_RcvItemAddColumnFilterID" [(ngModel)]="isColumnFilter2" class="k-checkbox" name="columnfilter" />
-                          <label class="k-checkbox-label" for="opti_RcvItemAddColumnFilterID">Enable Filter</label>
-                      </div>
-
-                      <div class="k-form-field float-left">
-                          <input type="checkbox" id="opti_RcvItemAddColumnGroupID"  [(ngModel)]="isColumnGroup2" class="k-checkbox" name="columnGroup" />
-                          <label class="k-checkbox-label" for="opti_RcvItemAddColumnGroupID">Enable Grouping</label>
-                      </div>
-                  </form>
-
-              </ng-template>
-
-              <kendo-grid-column field="qty" title="Quantity" class="text-right"></kendo-grid-column>
-              <kendo-grid-column field="bin" title="Bin"></kendo-grid-column>
-          </kendo-grid>
-      </div> 
-
     </div>
-  </div>
-</div>    
+</div>
 
 
 <!-- footer section start -->
 <div class="opti_footer">
     <div class="container-fluid">
-      <div class="row">
-        <div class="col-md-12">
-          <button class="k-button k-primary" type="button" (click)="save($event)" >Save</button>
-          <button class="k-button k-primary" type="button" (click)="receive($event)" >Receive</button>  
-          <button class="k-button k-primary" type="button">Cancel</button>
+        <div class="row">
+            <div class="col-md-12">
+                <button class="k-button k-primary" *ngIf="showButton" type="button" (click)="save($event)">Save</button>
+                <button class="k-button k-primary" *ngIf="showButton" type="button" (click)="receive($event)">Receive</button>
+                <button class="k-button k-primary" type="button" (click)="cancel($event)">Cancel</button>
+            </div>
         </div>
-      </div>
-    </div>    
+    </div>
 </div>
 <!-- footer section end -->
 
 <!-- Lookup section start -->
-<ng-template #rcvBin let-modal id="modalvender" >
+<ng-template #rcvBin let-modal id="modalvender">
     <div class="modal-header">
         <h4 class="modal-title">Select Bin No.</h4>
         <button #closeBinCodeGrid id="closeBinCodeGrid" type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
             <span aria-hidden="true">&times;</span>
         </button>
     </div>
-    
+
     <div class="modal-body text-center" style="padding: 20px;">
-        
-        <kendo-grid 
-        [kendoGridBinding]="gridData2" 
-        [resizable]="false" 
-        [pageSize]="50" 
-        [pageable]="true" 
-        [sortable]="true"  
-        [filterable]=isColumnFilter3
-        [groupable]=isColumnGroup3
-        [columnMenu]="{ columnChooser: false }" 
-        [selectable]="true" 
-        (selectionChange)="selectBinCode($event)"
-        #gridItem>
-            
-        <!-- grid template start -->
+
+        <kendo-grid [kendoGridBinding]="revingBins" [resizable]="false" [pageSize]="50" [pageable]="true"
+         [sortable]="true" 
+             [selectable]="true" (selectionChange)="selectBinCode($event)"
+            #gridItem>
+
+            <!-- grid template start -->
             <ng-template kendoGridToolbarTemplate>
                 <!-- show hide column start show hide -->
                 <kendo-grid-column-chooser class="float-left"></kendo-grid-column-chooser>
@@ -168,20 +152,18 @@
                 <!-- checkbox -->
                 <form class="k-form opti_show-hide-grid-column-filter float-left">
                     <div class="k-form-field float-left">
-                        <input #chkFilter type="checkbox" (change)="onFilterChange(chkFilter,gridItem)" id="opti_BinColumnFilterID" [(ngModel)]="isColumnFilter3" class="k-checkbox" name="columnfilter" />
+                        <input #chkFilter type="checkbox" (change)="onFilterChange(chkFilter,gridItem)" id="opti_BinColumnFilterID" [(ngModel)]="isColumnFilter3"
+                            class="k-checkbox" name="columnfilter" />
                         <label class="k-checkbox-label" for="opti_BinColumnFilterID">Enable Filter</label>
                     </div>
 
                     <div class="k-form-field float-left">
-                        <input type="checkbox" id="opti_BinColumnGroupID"  [(ngModel)]="isColumnGroup3" class="k-checkbox" name="columnGroup" />
+                        <input type="checkbox" id="opti_BinColumnGroupID" [(ngModel)]="isColumnGroup3" class="k-checkbox" name="columnGroup" />
                         <label class="k-checkbox-label" for="opti_BinColumnGroupID">Enable Grouping</label>
                     </div>
                 </form>
-
             </ng-template>
-
-            <kendo-grid-column field="binno" title="Bin No."  ></kendo-grid-column>
-            
+            <kendo-grid-column field="BINNO" title="Bin No."></kendo-grid-column>
         </kendo-grid>
 
     </div>

@@ -73,14 +73,14 @@ export class SigninComponent implements OnInit {
   }
 
   public setWarehouseList() {
-    debugger
+    
     if (document.getElementById("compId") != null) {
       this.selectedItem = document.getElementById("compId").innerText.trim();
     }
 
     this.httpcallservice.getWHS(this.selectedItem).subscribe(
       data => {
-        debugger
+        
         this.whsList = data.Table;
 
         for (var i = 0; i < this.whsList.length; i++) {
@@ -146,7 +146,7 @@ export class SigninComponent implements OnInit {
         },
         error => {
           this.showLoader = false;
-          debugger
+          
           alert("Login Failed");
         }
       );
@@ -191,7 +191,7 @@ export class SigninComponent implements OnInit {
       this.companyName.push(element.OPTM_COMPID);
     });
 
-    debugger
+    
     for (var i = 0; i < this.companyName.length; i++) {
       if (this.getCookie('CompID') == this.companyName[i]) {
         this.selectedItem = this.companyName[i];
@@ -203,7 +203,7 @@ export class SigninComponent implements OnInit {
   }
 
   private handleLicenseDataSuccessResponse() {
-    debugger
+    
     this.selectedWhse = document.getElementById("whseId").innerText.trim();
     this.showLoader = false;
     if (this.licenseData.length > 1) {
@@ -225,6 +225,7 @@ export class SigninComponent implements OnInit {
             this.setCookie('CompID', "", 365);
             this.setCookie('whseId', "", 365);
           }
+          alert("login done");
           this.router.navigateByUrl('home/dashboard');
         } else {
           alert(this.licenseData[0].Message + " " + this.licenseData[0].Token);
@@ -240,7 +241,7 @@ export class SigninComponent implements OnInit {
 
   private validateFields(): boolean {
 
-    debugger
+    
 
 
     if (this.selectedItem == 'Select Company' || this.selectedItem == '') {

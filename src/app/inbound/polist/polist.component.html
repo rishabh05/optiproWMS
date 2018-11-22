@@ -111,7 +111,7 @@
 </div>
 
 <!-- footer section start -->
-<div class="opti_footer">
+<!-- <div class="opti_footer">
     <div class="container-fluid">
       <div class="row">
         <div class="col-md-12">
@@ -120,7 +120,7 @@
         </div>
       </div>
     </div>    
-</div>
+</div> -->
 <!-- footer section end -->
 
 
@@ -128,7 +128,7 @@
 <ng-template #polookup let-modal>
     <div class="modal-header">
         <h4 class="modal-title">PO Lookup</h4>
-        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+        <button #POGridclosebutton id="POGridclosebutton" type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
             <span aria-hidden="true">&times;</span>
         </button>
     </div>
@@ -184,7 +184,11 @@
             </ng-template>
 
             <kendo-grid-column field="DocNum" title="PO#"  ></kendo-grid-column>
-            <kendo-grid-column field="DocDueDate" title="Del. Date"></kendo-grid-column>
+            <kendo-grid-column field="DocDueDate" title="Del. Date" >
+                <ng-template kendoGridCellTemplate let-dataItem>
+                    {{dataItem.DocDueDate | date:'dd/MM/yyyy'}}
+                    </ng-template>  
+            </kendo-grid-column>
             <kendo-grid-column field="CardCode" title="Vend. Code"></kendo-grid-column>
             <kendo-grid-column field="CardName" title="Name"></kendo-grid-column>
             
@@ -205,7 +209,7 @@
 <ng-template #itemlookup let-modal>
     <div class="modal-header">
         <h4 class="modal-title">Item Lookup</h4>
-        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+        <button type= #Itemclosebutton id="Itemclosebutton" type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
             <span aria-hidden="true">&times;</span>
         </button>
     </div>
@@ -243,21 +247,7 @@
                     </div>
                 </form>
 
-                <!-- export -->
-                <!-- <button type="button" kendoGridExcelCommand icon="file-excel" class="float-left opti_grid-toolbar-excelbutton">
-                    <svg-icon src="assets/images/common/download.svg" [svgStyle]="{ 'width.px':16, 'height.px':16}"></svg-icon>
-                </button> -->
-
-
-                <!-- <div class="float-right opti_right-top-sec-grid-purchase opti_right-top-sec-grid">
-                    <form class="k-form opti_common-search-form float-left opti_padding-zero">
-                        <label class="k-form-field opti_common-search-label">
-                            <input type="text" class="k-textbox" name="searchRequest" [(ngModel)]="searchRequest" />
-                            <span class="opti_vertical-align opti_mouse-pointer"><img src="assets/images/common/search-black.svg" class="" alt="Search" width="15" /></span>
-                        </label>
-                    </form>
-                </div> -->
-
+             
             </ng-template>
 
             <kendo-grid-column field="ItemCode" title="Item Code"  ></kendo-grid-column>

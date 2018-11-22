@@ -1,6 +1,6 @@
 import { UOM } from "./UOM";
 
-export interface OpenPOLinesModel{
+export interface POReceiptLots{
     CardCode: string;
     DOCENTRY: number;
     FACTOR: number;

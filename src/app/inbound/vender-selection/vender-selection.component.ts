@@ -83,11 +83,11 @@ export class VenderSelectionComponent implements OnInit {
 
   onVenderLookupClick(content) {
     // this.modalService.open(content, { centered: true });
-    debugger
+    
     this.httpCallServiceService.getVenderList().subscribe(
       (data: any) => {
         console.log(data);
-        debugger
+        
         if(data.Table != undefined){
           this.venders = data.Table;
         }else{

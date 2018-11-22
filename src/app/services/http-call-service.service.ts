@@ -19,6 +19,10 @@ export class HttpCallServiceService {
   private getItemListUrl: string = "/api/GoodReceiptPO/GetItemList";
   private OpenPOLinesurl: string = "/api/GoodReceiptPO/GetOpenPOLines";
   private AutoLotUrl: string = "/api/GoodReceiptPO/GetAutoLot";
+  private UOMUrl: string = "/api/GoodReceiptPO/getUOM";
+  private RevBinUrl: string = "/api/GoodReceiptPO/GetBinsForReceiptWithReceivingBin";
+  private BinExistUrl = "/api/GoodReceiptPO/IsBinExist";
+  private SubmitPOUrl = "/api/GoodReceiptPO/SubmitGoodsReceiptPO";
 
 
   httpOptions = {
@@ -67,7 +71,7 @@ export class HttpCallServiceService {
   }
 
   getLicenseData(compId: string): Observable<any> {
-    debugger
+
     let jObject = {
       LoginId: localStorage.getItem("UserId"),
       CompanyId: compId
@@ -76,17 +80,17 @@ export class HttpCallServiceService {
   }
 
 
-  getPOList(futurepo:boolean, vendercode: string): Observable<any> {
+  getPOList(futurepo: boolean, vendercode: string, itemcode: string): Observable<any> {
     let jObject = {
       GoodsReceiptToken: JSON.stringify([{
-        UserId: '',
+        UserId: itemcode,
         CompanyDBId: localStorage.getItem("CompID"), WhseCode: localStorage.getItem("whseId"),
         ItemCode: '', VendorCode: vendercode,
         FuturePO: futurepo, IsCustom: false, GUID: localStorage.getItem("GUID"),
         UsernameForLic: localStorage.getItem("UserId")
       }])
     };
-    debugger
+
     return this.http.post(this.baseUrl + this.POlistUrl, jObject, this.httpOptions);
   }
 
@@ -108,7 +112,7 @@ export class HttpCallServiceService {
       this.httpOptions);
   }
 
-  getItemList(futurepo: boolean, vendercode: string, po:string): Observable<any> {
+  getItemList(futurepo: boolean, vendercode: string, po: string): Observable<any> {
     let jObject = {
       GoodsReceiptToken: JSON.stringify([{
         UserId: '',
@@ -121,11 +125,11 @@ export class HttpCallServiceService {
   }
 
 
-  GetOpenPOLines(futurepo: boolean, itemCode: string, po:string): Observable<any> {
+  GetOpenPOLines(futurepo: boolean, itemCode: string, po: string): Observable<any> {
     let jObject = {
       GoodsReceiptToken: JSON.stringify([{
         UserId: '',
-        CompanyDBId: localStorage.getItem("CompID"), 
+        CompanyDBId: localStorage.getItem("CompID"),
         DOCNUM: po,
         ItemCode: itemCode,
         WhsCode: localStorage.getItem("whseId"),
@@ -135,15 +139,56 @@ export class HttpCallServiceService {
     return this.http.post(this.baseUrl + this.OpenPOLinesurl, jObject, this.httpOptions);
   }
 
-
   getAutoLot(itemCode: string): Observable<any> {
     let jObject = {
       GoodsReceiptToken: JSON.stringify([{
         UserId: '',
-        CompanyDBId: localStorage.getItem("CompID"), 
+        CompanyDBId: localStorage.getItem("CompID"),
         ItemCode: itemCode
       }])
     };
     return this.http.post(this.baseUrl + this.AutoLotUrl, jObject, this.httpOptions);
+  }
+
+  getUOMs(itemCode: string): Observable<any> {
+    let jObject = {
+      ItemKey: JSON.stringify([{
+        CompanyDBId: localStorage.getItem("CompID"),
+        ItemCode: itemCode
+      }])
+    };
+    return this.http.post(this.baseUrl + this.UOMUrl, jObject, this.httpOptions);
+  }
+
+  getRevBins(QCrequired: string): Observable<any> {
+    var jObject = {
+      WhsCode: JSON.stringify([{
+        CompanyDBId: localStorage.getItem("CompID"), ItemCode: '',
+        WhsCode: localStorage.getItem("whseId"), QCRequired: QCrequired,
+        PageId: "GRPO"
+      }])
+    };
+    return this.http.post(this.baseUrl + this.RevBinUrl, jObject, this.httpOptions);
+  }
+
+  IsBinExist(binCode: string): Observable<any> {
+    var jObject = {
+      WhsCode: JSON.stringify([{
+        CompanyDBId: localStorage.getItem("CompID"),
+        BinCode: binCode, ItemCode: '', WhsCode: localStorage.getItem("whseId")
+      }])
+    };
+    return this.http.post(this.baseUrl + this.BinExistUrl, jObject, this.httpOptions);
+  }
+
+
+  SubmitGoodsReceiptPO(binCode: string): Observable<any> {
+    var jObject = {
+      WhsCode: JSON.stringify([{
+        CompanyDBId: localStorage.getItem("CompID"),
+        BinCode: binCode, ItemCode: '', WhsCode: localStorage.getItem("whseId")
+      }])
+    };
+    return this.http.post(this.baseUrl + this.BinExistUrl, jObject, this.httpOptions);
   }
 }
