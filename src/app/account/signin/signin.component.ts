@@ -213,6 +213,7 @@ export class SigninComponent implements OnInit {
           localStorage.setItem("GUID", this.licenseData[1].GUID);
           localStorage.setItem("CompID", this.selectedItem);
           localStorage.setItem("whseId", this.selectedWhse);
+          localStorage.setItem("Token", this.licenseData[0].Token);
           // code for remember me
           if (this.isRemember == true) {
             this.setCookie('cookieEmail', this.userName, 365);

@@ -55,8 +55,8 @@
                         <div class="form-group row">
                             <label class="col-sm-4 col-form-label">Receiving Bin</label>
                             <div class="col-sm-8 opti_field-lookup">
-                                <input class="k-textbox" id="RecvbBinvalue" name="RecvbBinvalue" [(ngModel)]=RecvbBinvalue 
-                                (focusout)="focusOutFromBin()"/>
+                                <input class="k-textbox" id="RecvbBinid" name="RecvbBinvalue" [(ngModel)]=RecvbBinvalue 
+                                (focusout)="focusOutFromBin($event)"/>
                                 <button (click)="onRecvBinLookupClick(rcvBin)">
                                     <svg-icon src="{{imgPath}}/common/download.svg" [svgStyle]="{ 'width.px':16, 'height.px':16, 'fill':'#fff'}"></svg-icon>
                                 </button>

@@ -9,7 +9,9 @@ import { HttpCallServiceService } from '../../services/http-call-service.service
 import { InboundMasterComponent } from '../inbound-master.component';
 import { RevingBin } from '../../models/RevingBin';
 import { UOM } from '../../models/UOM';
-import { RecvingQuantityBin } from 'src/app/models/RecvingQuantityBin';
+import { RecvingQuantityBin } from '../../models/RecvingQuantityBin';
+import { oSubmitPOLots } from 'src/app/models/oSubmitPOLots';
+// import { oSubmitPOLots } from '../../models/oSubmitPOLots';
 
 
 @Component({
@@ -45,6 +47,7 @@ export class GRPOCalculationComponent implements OnInit {
   qty: number;
   recvingQuantityBinArray: RecvingQuantityBin[] = [];
   showButton: boolean = false;
+  oSubmitPOLotsObj: oSubmitPOLots;
 
 
   // UI Section
@@ -71,6 +74,7 @@ export class GRPOCalculationComponent implements OnInit {
     this.Ponumber = this.openPOLineModel[0].DOCENTRY;
     this.getUOMList();
     this.GetRecBinList();
+    // this.oSubmitPOLots = new oSubmitPOLots();
   }
 
   /**
@@ -129,7 +133,95 @@ export class GRPOCalculationComponent implements OnInit {
 
   receive(e) {
     alert("Do you want to print all labels after submit ?");
-    
+    this.prepareSubmitPurchaseOrder();
+  }
+
+  prepareSubmitPurchaseOrder() {
+    debugger
+    this.oSubmitPOLotsObj = new oSubmitPOLots();
+
+    this.oSubmitPOLotsObj.POReceiptLots = [];
+    this.oSubmitPOLotsObj.POReceiptLotDetails = [];
+    this.oSubmitPOLotsObj.UDF = [];
+    this.oSubmitPOLotsObj.LastSerialNumber = [];
+
+    this.oSubmitPOLotsObj.POReceiptLots.push({
+      DiServerToken: localStorage.getItem("Token"),
+      PONumber: this.Ponumber,
+      CompanyDBId: localStorage.getItem("CompID"),
+      LineNo: this.openPOLineModel[0].LINENUM,
+      ShipQty: this.openPOLineModel[0].RPTQTY.toString(),
+      OpenQty: this.openPOLineModel[0].OPENQTY,
+      WhsCode: localStorage.getItem("whseId"),
+      Tracking: this.openPOLineModel[0].TRACKING,
+      ItemCode: this.openPOLineModel[0].ITEMCODE,
+      LastSerialNumber: 0,
+      Line: 0,
+      UOM: -1,// this.openPOLineModel[0].UOM,
+      GUID: localStorage.getItem("GUID"),
+      UsernameForLic: localStorage.getItem("UserId")
+      //------end Of parameter For License----
+    });
+
+    this.oSubmitPOLotsObj.UDF.push({
+      Key: "OPTM_TARGETWHS",//UDF[iIndex].Key,
+      Value: "",//this.getView().byId("txtQCWhse").getValue(),//UDF[iIndex].Value,
+      //LotNo: UDF[iIndex].LotNo,
+      Flag: 'D', // D = Line, H= Header, L = Lots
+      LineNo: 0
+    });
+    this.oSubmitPOLotsObj.UDF.push({
+      Key: "OPTM_TARGETBIN",//UDF[iIndex].Key,
+      Value: "",//this.getView().byId("txtQCBin").getValue(),
+      //LotNo: UDF[iIndex].LotNo,
+      Flag: 'D', // D = Line, H= Header, L = Lots
+      LineNo: 0
+    });
+
+
+    for (var iBtchIndex = 0; iBtchIndex < this.recvingQuantityBinArray.length; iBtchIndex++) {
+      this.oSubmitPOLotsObj.POReceiptLotDetails.push({
+        Bin: this.recvingQuantityBinArray[iBtchIndex].Bin,
+        LineNo: this.openPOLineModel[0].LINENUM,
+        LotNumber: "", //getUpperTableData.GoodsReceiptLineRow[iBtchIndex].SysSerNo,
+        LotQty: this.recvingQuantityBinArray[iBtchIndex].Quantity.toString(),
+        SysSerial: "0",
+        ExpireDate: "",//oCurrentController.GetSubmitDateFormat(getUpperTableData.GoodsReceiptLineRow[iBtchIndex].EXPDATE), // oCurrentController.GetSubmitDateFormat(oActualGRPOModel.PoDetails[iIndex].ExpireDate),//oActualGRPOModel.PoDetails[iIndex].ExpireDate,
+        VendorLot: "",//getUpperTableData.GoodsReceiptLineRow[iBtchIndex].MfgSerNo,
+        //NoOfLabels: oActualGRPOModel.PoDetails[iIndex].NoOfLabels,
+        //Containers: piContainers,
+        SuppSerial: "",//getUpperTableData.GoodsReceiptLineRow[iBtchIndex].MfgSerNo,
+        ParentLineNo: 0
+        //InvType: oActualGRPOModel.GoodsReceiptLineRow[iIndex].LotStatus,
+      });
+    }
+
+    // for (var iLastIndexNumber = 0; iLastIndexNumber < olastSerialNumber.LastSerialNumber.length; iLastIndexNumber++) {
+    this.oSubmitPOLotsObj.LastSerialNumber.push({
+      // LastSerialNumber: olastSerialNumber.LastSerialNumber[iLastIndexNumber],
+      // LineId: olastSerialNumber.LineId[iLastIndexNumber],
+      // ItemCode: oActualGRPOModel.POLinesList[0].ItemCode
+    });
+    // }
+
+    this.httpCallServiceService.SubmitGoodsReceiptPO(this.oSubmitPOLotsObj).subscribe(
+      (data: any) => {
+        console.log(data);
+        debugger
+        if(data[0].ErrorMsg == "" && data[0].Successmsg == "SUCCESSFULLY"){
+          alert("Goods Receipt PO generated successfully with Doc No: "+data.DocEntry);
+          this.inboundMasterComponent.inboundComponent = 2;
+        }else{
+          alert(data[0].ErrorMsg);
+        }
+      },
+      error => {
+        console.log("Error: ", error);
+        alert("fail");
+      }
+    );
+
+
   }
 
   cancel(e) {
@@ -151,7 +243,8 @@ export class GRPOCalculationComponent implements OnInit {
     let result = this.recvingQuantityBinArray.find(element => element.Bin == this.RecvbBinvalue);
     if (result == undefined) {
       this.recvingQuantityBinArray.push(new RecvingQuantityBin(this.qty, this.RecvbBinvalue));
-      // this.recvingQuantityBinArray = this.temprecvingQuantityBinArray;
+      this.showButton = true;
+      this.qty = undefined;
     } else {
       alert("can not item add in same bin");
       return;
@@ -168,13 +261,21 @@ export class GRPOCalculationComponent implements OnInit {
     this.modalService.open(content, { centered: true });
   }
 
+  lastTypedBin: string = "";
   public focusOutFromBin() {
+    debugger
+    if (this.RecvbBinvalue == undefined || this.lastTypedBin == this.RecvbBinvalue) {
+      return;
+    }
+    this.lastTypedBin = this.RecvbBinvalue;
     this.httpCallServiceService.IsBinExist(this.RecvbBinvalue).subscribe(
       (data: any) => {
         console.log(data);
-        debugger
-        if(data[0].Result == "0"){
+
+        if (data[0].Result == "0") {
           alert("Invalid Bin");
+          this.RecvbBinvalue = "";
+          document.getElementById("RecvbBinid").blur();
         }
       },
       error => {

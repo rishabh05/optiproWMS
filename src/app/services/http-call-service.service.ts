@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { oSubmitPOLots } from '../models/oSubmitPOLots';
 
 
 @Injectable({
@@ -23,6 +24,8 @@ export class HttpCallServiceService {
   private RevBinUrl: string = "/api/GoodReceiptPO/GetBinsForReceiptWithReceivingBin";
   private BinExistUrl = "/api/GoodReceiptPO/IsBinExist";
   private SubmitPOUrl = "/api/GoodReceiptPO/SubmitGoodsReceiptPO";
+  private VenderExistUrl = "/api/GoodReceiptPO/IsVendorExists";
+  private POExistUrl = "/api/GoodReceiptPO/IsPOExists";
 
 
   httpOptions = {
@@ -182,13 +185,31 @@ export class HttpCallServiceService {
   }
 
 
-  SubmitGoodsReceiptPO(binCode: string): Observable<any> {
+  SubmitGoodsReceiptPO(oSubmitPOLots: oSubmitPOLots): Observable<any> {
+    var jObject = { GoodsReceiptToken: JSON.stringify(oSubmitPOLots) };
+    debugger
+    return this.http.post(this.baseUrl + this.SubmitPOUrl, jObject, this.httpOptions);
+  }
+
+  IsVenderExist(venderCode: string): Observable<any> {
     var jObject = {
-      WhsCode: JSON.stringify([{
-        CompanyDBId: localStorage.getItem("CompID"),
-        BinCode: binCode, ItemCode: '', WhsCode: localStorage.getItem("whseId")
+      VendorCode: JSON.stringify([{
+        UserId: '', CompanyDBId: localStorage.getItem("CompID"),
+        VendorCode: venderCode
       }])
     };
-    return this.http.post(this.baseUrl + this.BinExistUrl, jObject, this.httpOptions);
+    return this.http.post(this.baseUrl + this.VenderExistUrl, jObject, this.httpOptions);
   }
+
+  IsPOExist(poCode: string, cardCode: string): Observable<any> {
+    var jObject = {
+      POCode: JSON.stringify([{
+        UserId: '', CompanyDBId: localStorage.getItem("CompID"),
+        POCode: poCode,
+        CardCode: cardCode
+      }])
+    };
+    return this.http.post(this.baseUrl + this.VenderExistUrl, jObject, this.httpOptions);
+  }
+
 }
