@@ -36,8 +36,16 @@
                     </ng-template>
 
                     <kendo-grid-column field="ITEMCODE" title="Item Code"></kendo-grid-column>
-                    <kendo-grid-column field="OPENQTY" title="Open Quantity" class="text-right"></kendo-grid-column>
-                    <kendo-grid-column field="RPTQTY" title="Receive Quantity" class="text-right"></kendo-grid-column>
+                    <kendo-grid-column field="OPENQTY" title="Open Quantity" class="text-right">
+                        <ng-template kendoGridCellTemplate let-dataItem>
+                            {{dataItem.OPENQTY | number:'1.3-5'}}
+                            </ng-template>  
+                    </kendo-grid-column>
+                    <kendo-grid-column field="RPTQTY" title="Receive Quantity" class="text-right">
+                        <ng-template kendoGridCellTemplate let-dataItem>
+                            {{dataItem.RPTQTY | number:'1.3-5'}}
+                            </ng-template>  
+                    </kendo-grid-column>
                     <kendo-grid-column field="UOM1" title="UOM">
                         <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
                             <kendo-dropdownlist class="form-control" name="uomSelectedVal"

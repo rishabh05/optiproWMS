@@ -95,8 +95,16 @@
                 </ng-template>
 
                 <kendo-grid-column field="ITEMCODE" title="Item Code"  ></kendo-grid-column>
-                <kendo-grid-column field="OPENQTY" title="Open Quantity"  class="text-right"></kendo-grid-column>
-                <kendo-grid-column field="RPTQTY" title="Receive Quantity"  class="text-right"></kendo-grid-column>
+                <kendo-grid-column field="OPENQTY" title="Open Quantity"  class="text-right">
+                    <ng-template kendoGridCellTemplate let-dataItem>
+                        {{dataItem.OPENQTY | number:'1.3-5'}}
+                        </ng-template>  
+                </kendo-grid-column>
+                <kendo-grid-column field="RPTQTY" title="Receive Quantity"  class="text-right">
+                    <ng-template kendoGridCellTemplate let-dataItem>
+                        {{dataItem.RPTQTY | number:'1.3-5'}}
+                        </ng-template>                    
+                </kendo-grid-column>
                 
                 <!-- xlsx template start -->
                 <!-- <kendo-grid-excel fileName="Sales-order.xlsx"></kendo-grid-excel> -->
@@ -111,16 +119,16 @@
 </div>
 
 <!-- footer section start -->
-<!-- <div class="opti_footer">
+<div class="opti_footer">
     <div class="container-fluid">
       <div class="row">
         <div class="col-md-12">
-            <button class="k-button k-primary" type="button">Cancel</button>
-             <button class="k-button k-primary" type="button" (click)="onNextClick($event)">Next</button>
+            <button class="k-button k-primary" id="POlistCancelButton" (click)="Cancel($event)" type="button">Cancel</button>
+             <button class="k-button k-primary" *ngIf="AddtoGRPOFlag" type="button" (click)="AddtoGRPO($event)">Add to GRPO</button>
         </div>
       </div>
     </div>    
-</div> -->
+</div>
 <!-- footer section end -->
 
 
@@ -143,7 +151,6 @@
         [sortable]="true"  
         [filterable]=isColumnFilter
         [groupable]=isColumnGroup 
-        [columnMenu]="{ columnChooser: false }" 
         [selectable]="true" 
         (selectionChange)="onPOSelect($event)"
         #gridItem>

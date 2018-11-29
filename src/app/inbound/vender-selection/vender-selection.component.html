@@ -30,23 +30,18 @@
       <!-- form section end   -->
 
       <!-- grid section start -->
-      <div class="opti_purchase-order-table" style="margin-top: 15px;">
+      <div class="opti_purchase-order-table" style="margin-top: 15px;" *ngIf="showGrid">
         <div class="col-md-12">
             <kendo-grid 
-            [kendoGridBinding]="gridData" 
+            [kendoGridBinding]="PurchaseOrders" 
             [resizable]="false" 
             [pageSize]="50" 
             [pageable]="true" 
             [sortable]="true"  
             [filterable]=isColumnFilter
-            [groupable]=isColumnGroup 
-            [columnMenu]="{ columnChooser: false }" 
             [selectable]="true" 
             (selectionChange)="openSalesOrderDetailOnSelectSalesOrder($event)"
             #gridItem>
-                <!-- [kendoGridBinding]="gridData | customPipeItem:searchRequest"  -->
-                <!-- (selectionChange)="openInqueryDetailOnSelectInquery(gridItem, $event, true, gridItem)" -->
-
                 <!-- grid template start -->
                 <ng-template kendoGridToolbarTemplate>
                     <!-- show hide column start show hide -->
@@ -65,34 +60,15 @@
                         </div>
                     </form>
 
-                    <!-- export -->
-                    <!-- <button type="button" kendoGridExcelCommand icon="file-excel" class="float-left opti_grid-toolbar-excelbutton">
-                        <svg-icon src="assets/images/common/download.svg" [svgStyle]="{ 'width.px':16, 'height.px':16}"></svg-icon>
-                    </button> -->
-
-
-                    <!-- <div class="float-right opti_right-top-sec-grid-purchase opti_right-top-sec-grid">
-                        <form class="k-form opti_common-search-form float-left opti_padding-zero">
-                            <label class="k-form-field opti_common-search-label">
-                                <input type="text" class="k-textbox" name="searchRequest" [(ngModel)]="searchRequest" />
-                                <span class="opti_vertical-align opti_mouse-pointer"><img src="assets/images/common/search-black.svg" class="" alt="Search" width="15" /></span>
-                            </label>
-                        </form>
-                    </div> -->
-
                 </ng-template>
 
-                <kendo-grid-column field="orderNumber" title="Purchase Order Number"  ></kendo-grid-column>
+                <kendo-grid-column field="DOCENTRY" title="Purchase Order Number"  ></kendo-grid-column>
                 <kendo-grid-column field="orderId" title="Delete">
                     <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex"> 
                         <svg-icon  src="{{imgPath}}/common/download.svg" [svgStyle]="{ 'width.px':16, 'height.px':16}"></svg-icon>
                         {{dataItem.orderId}}
                     </ng-template>
                 </kendo-grid-column>
-                
-                <!-- xlsx template start -->
-                <!-- <kendo-grid-excel fileName="Sales-order.xlsx"></kendo-grid-excel> -->
-                <!-- xlsx template end -->
             </kendo-grid>
         </div>    
       </div>

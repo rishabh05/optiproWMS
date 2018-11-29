@@ -141,10 +141,12 @@ export class SigninComponent implements OnInit {
     if (!this.isCompleteLoginVisible) {
       this.httpcallservice.ValidateUserLogin(this.userName, this.password).subscribe(
         data => {
+          debugger
           this.userDetails = data.Table;
           this.handleValidationUserSuccessResponse();
         },
         error => {
+          debugger
           this.showLoader = false;
           
           alert("Login Failed");
@@ -158,10 +160,12 @@ export class SigninComponent implements OnInit {
       }
       this.httpcallservice.getLicenseData(this.selectedItem).subscribe(
         data => {
+          debugger
           this.licenseData = data;
           this.handleLicenseDataSuccessResponse();
         },
         error => {
+          debugger
           this.showLoader = false;
           alert("license Failed");
         }

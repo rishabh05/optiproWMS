@@ -11,7 +11,7 @@ import { RevingBin } from '../../models/RevingBin';
 import { UOM } from '../../models/UOM';
 import { RecvingQuantityBin } from '../../models/RecvingQuantityBin';
 import { oSubmitPOLots } from 'src/app/models/oSubmitPOLots';
-// import { oSubmitPOLots } from '../../models/oSubmitPOLots';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -22,7 +22,7 @@ import { oSubmitPOLots } from 'src/app/models/oSubmitPOLots';
 export class GRPOCalculationComponent implements OnInit {
 
   constructor(private modalService: NgbModal, private inboundMasterComponent: InboundMasterComponent,
-    private httpCallServiceService: HttpCallServiceService) { }
+    private httpCallServiceService: HttpCallServiceService, private router: Router) { }
 
   imgPath = environment.imagePath;
   isMobile: boolean;
@@ -127,13 +127,16 @@ export class GRPOCalculationComponent implements OnInit {
     //grid.filter.filters=[];
   }
 
-  save(e) {
-
+  save() {
+    this.prepareSubmitPurchaseOrder();
+    this.inboundMasterComponent.savePOLots(this.oSubmitPOLotsObj);
+    this.inboundMasterComponent.inboundComponent = 2;
   }
 
   receive(e) {
     alert("Do you want to print all labels after submit ?");
     this.prepareSubmitPurchaseOrder();
+    this.SubmitGoodsReceiptPO();
   }
 
   prepareSubmitPurchaseOrder() {
@@ -203,15 +206,22 @@ export class GRPOCalculationComponent implements OnInit {
       // ItemCode: oActualGRPOModel.POLinesList[0].ItemCode
     });
     // }
+  }
 
+  SubmitGoodsReceiptPO(){
     this.httpCallServiceService.SubmitGoodsReceiptPO(this.oSubmitPOLotsObj).subscribe(
       (data: any) => {
         console.log(data);
         debugger
-        if(data[0].ErrorMsg == "" && data[0].Successmsg == "SUCCESSFULLY"){
-          alert("Goods Receipt PO generated successfully with Doc No: "+data.DocEntry);
+        if (data[0].ErrorMsg == "" && data[0].Successmsg == "SUCCESSFULLY") {
+          alert("Goods Receipt PO generated successfully with Doc No: " + data.DocEntry);
           this.inboundMasterComponent.inboundComponent = 2;
-        }else{
+        } else if (data[0].ErrorMsg == "7001") {
+          alert("session expire");
+          this.router.navigateByUrl('account');
+          return;
+        }
+        else {
           alert(data[0].ErrorMsg);
         }
       },
@@ -220,8 +230,6 @@ export class GRPOCalculationComponent implements OnInit {
         alert("fail");
       }
     );
-
-
   }
 
   cancel(e) {

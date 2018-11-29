@@ -8,7 +8,7 @@ import { HttpCallServiceService } from '../../services/http-call-service.service
 import { Vender } from '../../models/Vender';
 import { Router } from '@angular/router';
 import { InboundMasterComponent } from '../inbound-master.component';
-declare var $:any;
+declare var $: any;
 
 @Component({
   selector: 'app-vender-selection',
@@ -27,14 +27,13 @@ export class VenderSelectionComponent implements OnInit {
   showLoader: boolean = false;
   searchRequest: string = '';
 
-  public gridData: any[];
-  public gridData2: any[];
+  public PurchaseOrders: any[] = this.inboundMasterComponent.SubmitPOArray;
 
   venders: Vender[];
   venderCode: string = "";
   venderName: string = "";
-
-  // @ViewChild('closeVendorCodeGrid') closeVendorCodeGrid;
+  showGrid: boolean = false;
+  
 
   // UI Section
   @HostListener('window:resize', ['$event'])
@@ -65,13 +64,13 @@ export class VenderSelectionComponent implements OnInit {
   */
   public getPurchaseOrderList() {
     this.showLoader = true;
-    this.gridData = purchaseOrderNumberVendor;
+    this.PurchaseOrders = purchaseOrderNumberVendor;
     setTimeout(() => {
       this.showLoader = false;
     }, 1000);
   }
 
- onFilterChange(checkBox: any, grid: GridComponent) {
+  onFilterChange(checkBox: any, grid: GridComponent) {
     if (checkBox.checked == false) {
       this.clearFilter(grid);
     }
@@ -82,20 +81,18 @@ export class VenderSelectionComponent implements OnInit {
   }
 
   onVenderLookupClick(content) {
-    // this.modalService.open(content, { centered: true });
-    
     this.httpCallServiceService.getVenderList().subscribe(
       (data: any) => {
         console.log(data);
-        
-        if(data.Table != undefined){
+
+        if (data.Table != undefined) {
           this.venders = data.Table;
-        }else{
+        }
+        else if (data.LICDATA != undefined && data.LICDATA[0].ErrorMsg == "7001") {
           alert("session expire");
           this.router.navigateByUrl('account');
           return;
         }
-        
         this.modalService.open(content, { centered: true });
       },
       error => {
@@ -109,13 +106,10 @@ export class VenderSelectionComponent implements OnInit {
     const vender = selection.selectedRows[0].dataItem;
     this.venderCode = vender.CARDCODE;
     this.venderName = vender.CARDNAME;
-    // modal.dismiss
-    
-    // this.modalService.dismissAll;
     document.getElementById('closeVendorCodeGrid').click();
   }
 
-  public onNextClick(){
+  public onNextClick() {
     this.inboundMasterComponent.selectedVernder = this.venderCode;
     this.inboundMasterComponent.inboundComponent = 2;
   }

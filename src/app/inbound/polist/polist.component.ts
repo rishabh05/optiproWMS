@@ -10,6 +10,7 @@ import { POs } from '../../models/POs';
 import { GRPOItems } from '../../models/GRPOItems';
 import { OpenPOLinesModel } from '../../models/OpenPOLinesModel';
 import { AutoLot } from '../../models/AutoLot';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-polist',
@@ -19,7 +20,7 @@ import { AutoLot } from '../../models/AutoLot';
 export class POListComponent implements OnInit {
 
   constructor(private modalService: NgbModal, private inboundMasterComponent: InboundMasterComponent,
-    private httpCallServiceService: HttpCallServiceService) { }
+    private httpCallServiceService: HttpCallServiceService, private router: Router) { }
 
   imgPath = environment.imagePath;
   isMobile: boolean;
@@ -38,6 +39,7 @@ export class POListComponent implements OnInit {
   item: string = "";
   futurepo: boolean = false;
   autoLot: AutoLot[];
+  public AddtoGRPOFlag: boolean = this.inboundMasterComponent.AddtoGRPOFlag;
 
 
   // UI Section
@@ -66,7 +68,7 @@ export class POListComponent implements OnInit {
       this.poCode).subscribe(
         (data: any) => {
           console.log(data);
-          
+
           this.GRPOItemList = data.Table;
           this.modalService.open(content, { centered: true });
         },
@@ -88,13 +90,19 @@ export class POListComponent implements OnInit {
   }
 
   onPOlookupClick(content) {
-    
+
     this.httpCallServiceService.getPOList(this.futurepo,
       this.inboundMasterComponent.selectedVernder, this.item).subscribe(
         (data: any) => {
+          debugger
           console.log(data);
-          
-          this.polist = data.Table;
+          if (data.Table != undefined) {
+            this.polist = data.Table;
+          } else if (data.LICDATA != undefined && data.LICDATA[0].ErrorMsg == "7001") {
+            alert("session expire");
+            this.router.navigateByUrl('account');
+            return;
+          }
           this.modalService.open(content, { centered: true });
         },
         error => {
@@ -106,7 +114,7 @@ export class POListComponent implements OnInit {
   }
 
   onPOSelect(selection) {
-    
+
     const po = selection.selectedRows[0].dataItem;
     this.poCode = po.DocNum;
     document.getElementById('POGridclosebutton').click();
@@ -124,10 +132,16 @@ export class POListComponent implements OnInit {
     this.httpCallServiceService.GetOpenPOLines(this.futurepo, this.item,
       this.poCode).subscribe(
         (data: any) => {
+          debugger
           console.log(data);
-          
-          this.openPOLinesModel = data.Table;
-          this.isInspectionGrid = true;
+          if (data.Table != undefined) {
+            this.openPOLinesModel = data.Table;
+            this.isInspectionGrid = true;
+          } else if (data.LICDATA != undefined && data.LICDATA[0].ErrorMsg == "7001") {
+            alert("session expire");
+            this.router.navigateByUrl('account');
+            return;
+          }
         },
         error => {
           console.log("Error: ", error);
@@ -138,7 +152,6 @@ export class POListComponent implements OnInit {
 
 
   onClickOpenPOLineRowOpenAutoLot(selection) {
-    
     const poline = selection.selectedRows[0].dataItem;
     this.getAutoLot(poline.ITEMCODE);
   }
@@ -147,9 +160,13 @@ export class POListComponent implements OnInit {
     this.httpCallServiceService.getAutoLot(itemCode).subscribe(
       (data: any) => {
         console.log(data);
-        
-        this.autoLot = data.Table;
-
+        if (data.Table != undefined) {
+          this.autoLot = data.Table;
+        } else if (data.LICDATA != undefined && data.LICDATA[0].ErrorMsg == "7001") {
+          alert("session expire");
+          this.router.navigateByUrl('account');
+          return;
+        }
         if (this.autoLot.length > 0) {
         }
         else {
@@ -157,7 +174,7 @@ export class POListComponent implements OnInit {
         }
 
         this.inboundMasterComponent.setAutoLots(this.autoLot);
-        this.openPOLineModel = this.openPOLinesModel.find(e=> e.ITEMCODE == itemCode);
+        this.openPOLineModel = this.openPOLinesModel.find(e => e.ITEMCODE == itemCode);
         this.inboundMasterComponent.setClickedItemDetail(this.openPOLineModel);
 
         this.isInspectionGrid = false;
@@ -168,5 +185,14 @@ export class POListComponent implements OnInit {
         alert("fail");
       }
     );
+  }
+
+  AddtoGRPO(){
+    this.inboundMasterComponent.inboundComponent = 1;
+    this.inboundMasterComponent.AddPOList(this.openPOLineModel);
+  }
+
+  Cancel() {
+    this.inboundMasterComponent.inboundComponent = 1;
   }
 }
