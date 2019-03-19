@@ -13,7 +13,7 @@ export class HttpCallServiceService {
   // private adminUrl = "http://172.16.6.167/OptiAdmin";
   private venderListUrl: string = "/api/GoodReceiptPO/GetVendorList";
   private validateUser: string = "/api/login/ValidateUserLogin";
-  private licenseDataUrl: string = "/api/Login/GetLicenseData";
+  private lisenceDataUrl: string = "/api/Login/GetLicenseData";
   private POlistUrl: string = "/api/GoodReceiptPO/GetPOList";
   private PSUrl: string = "/api/Login/GetPSURL";
   private WHS: string = "/api/login/GetWHS";
@@ -79,7 +79,7 @@ export class HttpCallServiceService {
       LoginId: localStorage.getItem("UserId"),
       CompanyId: compId
     };
-    return this.http.post(this.baseUrl + this.licenseDataUrl, jObject, this.httpOptions);
+    return this.http.post(this.baseUrl + this.lisenceDataUrl, jObject, this.httpOptions);
   }
 
 

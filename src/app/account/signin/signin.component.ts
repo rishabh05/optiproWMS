@@ -4,7 +4,7 @@ import { HttpCallServiceService } from '../../services/http-call-service.service
 import { ValidateUser } from '../../models/ValidateUser';
 import { LicenseData } from '../../models/LicenseData';
 import { WHS } from '../../models/WHS';
-
+import {TranslateService} from '@ngx-translate/core';
 
 @Component({
   selector: 'app-signin',
@@ -39,7 +39,13 @@ export class SigninComponent implements OnInit {
   public companyName: Array<string> = [];
   readonlyFlag: boolean = false;
 
-  constructor(private router: Router, private httpcallservice: HttpCallServiceService) { }
+  // constructor(private translate: TranslateService) {
+  //   translate.setDefaultLang('en');
+  // }
+  constructor(private router: Router, private httpcallservice: HttpCallServiceService, 
+    private translate: TranslateService) {
+      translate.setDefaultLang('en');
+     }
 
   @ViewChild('myCanvas') myCanvas;
 
@@ -132,6 +138,7 @@ export class SigninComponent implements OnInit {
    * Function for login
    */
   public async login() {
+    // this.isCompleteLoginVisible = true;
     if (this.userName == "" || this.password == "") {
       alert("username or password cannot be blank");
       return true;

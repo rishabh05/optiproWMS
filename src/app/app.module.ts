@@ -6,9 +6,14 @@ import { AppComponent } from './app.component';
 import { LandingComponent } from './common/landing/landing.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
-import { HttpClientModule } from '@angular/common/http';
 import { OutboundModule } from './outbound/outbound.module';
+import {TranslateModule, TranslateLoader} from '@ngx-translate/core';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { HttpClientModule, HttpClient } from '@angular/common/http';
 
+export function createTranslateLoader(http: HttpClient) {
+  return new TranslateHttpLoader(http, './assets/lang/i18n/', '.json');
+}
 
 @NgModule({
   declarations: [
@@ -21,9 +26,18 @@ import { OutboundModule } from './outbound/outbound.module';
     BrowserAnimationsModule,
     PerfectScrollbarModule,
     HttpClientModule,
-    OutboundModule
+    OutboundModule,
+    TranslateModule.forRoot({
+      loader: {
+        provide: TranslateLoader,
+        useFactory: createTranslateLoader,
+        deps: [HttpClient]
+      },
+      isolate: false
+    }),
   ],
   providers: [],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
+

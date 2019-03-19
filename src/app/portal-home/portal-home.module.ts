@@ -12,7 +12,7 @@ import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 import { AngularSvgIconModule } from 'angular-svg-icon';
-import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
+// import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import 'hammerjs';
 import { ChartsModule } from '@progress/kendo-angular-charts';
@@ -29,7 +29,7 @@ import { InboundModule } from '../inbound/inbound.module';
 
     // BS
     AngularSvgIconModule, 
-    BsDropdownModule.forRoot(),
+    // BsDropdownModule.forRoot(),
     PerfectScrollbarModule,
     
     // Angular
